@@ -216,7 +216,7 @@ const YourTrainees = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        "${apiUrl}/trainee/create-workout-for-trainee",
+        `${apiUrl}/trainee/create-workout-for-trainee`,
         {
           trainee_id: selectedTrainee.id,
           ...newWorkout,
@@ -266,7 +266,7 @@ const YourTrainees = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        "${apiUrl}/exercises/create",
+        `${apiUrl}/exercises/create`,
         {
           ...newExercise,
           workout_id: selectedWorkout.id,

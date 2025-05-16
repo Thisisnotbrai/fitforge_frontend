@@ -1,27 +1,25 @@
 /**
- 
-Config Validator*,
-This utility validates that the config.js file exists and has been properly set up,
-by displaying helpful error messages if it's missing or using default values.*/
+ * Config Validator
+ * This utility validates configuration settings and provides warnings for missing values
+ */
 
 import config from "./config.js";
 
 export const validateConfig = () => {
-  // Check if the API key is still the default from config.example.js
-  if (config.openRouter.apiKey === "YOUR_API_KEY_HERE") {
-    console.error(
-      "%c[Config Error] You are using the default API key from config.example.js",
-      "color: red; font-weight: bold; font-size: 14px;"
-    );
-    console.error(
-      "%cPlease follow the instructions in src/config/config.example.js to set up your config.js file correctly",
-      "color: red; font-size: 12px;"
-    );
+  const warnings = [];
 
-    return false;
+  // Check if the API key is set
+  if (!config.openRouter?.apiKey || config.openRouter.apiKey === 'YOUR_API_KEY_HERE') {
+    warnings.push('OpenRouter API key is not configured');
   }
 
-  // Everything looks good
+  // Log any warnings
+  if (warnings.length > 0) {
+    console.warn('Configuration Warnings:');
+    warnings.forEach(warning => console.warn(`- ${warning}`));
+  }
+
+  // Return true to allow the application to continue
   return true;
 };
 
