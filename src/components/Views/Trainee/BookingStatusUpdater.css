@@ -1,0 +1,136 @@
+.booking-status-updater {
+  margin-top: 10px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+}
+
+.status-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+}
+
+.status-badge.pending {
+  background-color: #ff9800;
+}
+
+.status-badge.confirmed {
+  background-color: #4caf50;
+}
+
+.status-badge.completed {
+  background-color: #2196f3;
+}
+
+.status-badge.cancelled {
+  background-color: #f44336;
+}
+
+.booking-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.booking-actions button {
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.confirm-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.confirm-btn:hover {
+  background-color: #43a047;
+}
+
+.complete-btn {
+  background-color: #2196f3;
+  color: white;
+}
+
+.complete-btn:hover {
+  background-color: #1e88e5;
+}
+
+.cancel-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background-color: #e53935;
+}
+
+.partnership-btn {
+  background-color: #9c27b0;
+  color: white;
+}
+
+.partnership-btn:hover {
+  background-color: #8e24aa;
+}
+
+.status-complete,
+.status-cancelled {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.status-complete {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-cancelled {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.status-error {
+  color: #f44336;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+.partnership-info {
+  margin-top: 15px;
+  padding: 15px;
+  background-color: #e8f5e9;
+  border-radius: 6px;
+  border-left: 4px solid #4caf50;
+}
+
+.partnership-info h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #2e7d32;
+}
+
+.partnership-info p {
+  margin: 5px 0;
+  font-size: 0.9rem;
+}
+
+.partnership-message {
+  margin-top: 12px;
+  font-weight: bold;
+  color: #2e7d32;
+}

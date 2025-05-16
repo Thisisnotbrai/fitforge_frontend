@@ -1,0 +1,106 @@
+.hero {
+  text-align: center;
+  padding: 80px 20px;
+  background: #0f172a;
+  color: white;
+}
+
+.trust-badge {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 15px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.hero-title {
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #6a5acd, #7fffd4, #ffa07a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-description {
+  max-width: 600px;
+  margin: 0 auto 20px;
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+.hero-buttons {
+  margin-top: 20px;
+}
+
+.hero-buttons button {
+  margin: 10px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.start-now {
+  background: #f87060;
+  color: black;
+}
+
+.start-now:hover {
+  background: #EDC9AF;
+}
+
+.explore {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid white;
+}
+
+.explore:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Card Design */
+.features {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.feature-card1 {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid #f87060;
+  border-radius: 8px;
+  padding: 20px;
+  width: 30%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+
+.feature-card1:hover {
+  transform: scale(1.05);
+}
+
+.feature-icon1 {
+  color: #f87060;
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.feature-title11 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.feature-description1 {
+  font-size: 14px;
+  opacity: 0.8;
+}

@@ -1,0 +1,89 @@
+body {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  background-color: #f8f9fa;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Bebas Neue", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.active-nav-link {
+  font-weight: bold;
+  color: #4a8df8;
+  text-decoration: underline;
+}
+
+/* Page-specific styling */
+.page-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 180px); /* Account for header and margins */
+}
+
+/* Placeholder pages styling */
+.placeholder-page {
+  background-color: white;
+  border-radius: 8px;
+  padding: 40px;
+  max-width: 800px;
+  margin: 40px auto;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.placeholder-page h1 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 2rem;
+}
+
+.placeholder-page p {
+  color: #555;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Route transition animations */
+.route-transition-enter {
+  opacity: 0;
+}
+
+.route-transition-enter-active {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+
+.route-transition-exit {
+  opacity: 1;
+}
+
+.route-transition-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}

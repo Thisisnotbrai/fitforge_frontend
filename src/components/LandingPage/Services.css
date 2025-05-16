@@ -1,0 +1,83 @@
+.services {
+    padding: 4rem 2rem;
+    background-color: #0f172a; /* Dark theme */
+    text-align: center;
+    color: white;
+}
+
+.services-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.services h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.services .subtitle {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.2rem;
+    color: #94a3b8;
+    margin-bottom: 2rem;
+}
+
+
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Ensures better card width */
+    gap: 1.5rem;
+    justify-content: center; /* Centers the grid */
+    align-items: stretch; /* Ensures consistent height */
+}
+
+.feature-card {
+    background: #1e293b;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.05);
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distributes content evenly */
+    width: 100%; /* Ensures they take up full grid space */
+    max-width: 300px; /* Prevents them from becoming too narrow */
+    min-height: 200px; /* Prevents them from becoming too tall */
+}
+
+.feature-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.1);
+}
+
+.feature-icon {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    color: #facc15;
+}
+
+.feature-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    color: white;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+.feature-card p {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    color: #94a3b8;
+    line-height: 1.4;
+}

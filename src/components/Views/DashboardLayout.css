@@ -1,0 +1,407 @@
+/* components/Views/DashboardLayout.css */
+.dashboard-container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-layout {
+  display: flex;
+  height: 100vh; /* Full viewport height */
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #2c3e50;
+  color: white;
+  padding: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin: 15px 0;
+}
+
+.sidebar ul li button {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+}
+
+.sidebar ul li button:hover {
+  background: #c0392b;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #0f172a;
+}
+
+.header {
+  background-color: #1a202c;
+  padding: 15px 20px 10px;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 8px;
+  position: sticky;
+  top: 10px;
+  z-index: 100;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: calc(100% - 20px);
+  box-sizing: border-box;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  justify-content: center;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.fit {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.forge {
+  color: #ff4757;
+  font-weight: bold;
+}
+
+/* Add this for trainer spacing */
+[data-role="trainer"] .nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 30px; /* Equal spacing for trainer nav */
+}
+
+/* Keep original nav for all users */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  -ms-overflow-style: none;
+  white-space: nowrap;
+  padding-bottom: 5px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.nav::-webkit-scrollbar {
+  height: 4px;
+}
+
+.nav::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.nav a,
+.nav button {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin: 0 8px;
+}
+
+/* For trainer view, use wider spacing */
+[data-role="trainer"] .nav a,
+[data-role="trainer"] .nav button {
+  margin: 0 15px;
+}
+
+/* Remove margin from first and last items */
+.nav a:first-child {
+  margin-left: 0;
+}
+
+.nav button:last-child {
+  margin-right: 0;
+}
+
+.nav a:hover,
+.nav button:hover {
+  text-decoration: underline;
+}
+
+/* Navigation link styles - keep more compact */
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 5px;
+  transition: all 0.2s ease;
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  text-decoration: none !important;
+}
+
+.nav-link.active {
+  background-color: transparent;
+  font-weight: bold;
+  color: #ff4757;
+  position: relative;
+}
+
+.nav-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #ff4757;
+  border-radius: 2px;
+}
+
+/* Profile link styles */
+.profile-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: background-color 0.2s ease;
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.profile-link:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  text-decoration: none !important;
+}
+
+/* Logout button styles */
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 5px;
+  background-color: rgba(255, 49, 49, 0.2);
+  transition: all 0.2s ease;
+  flex-shrink: 0; /* Prevent shrinking */
+  margin-left: 0; /* Remove the margin to keep in line */
+}
+
+.logout-button:hover {
+  background-color: rgba(255, 49, 49, 0.4);
+  text-decoration: none !important;
+}
+
+/* Dashboard content container */
+.dashboard-content {
+  padding: 20px;
+  margin: 0 10px 10px 10px;
+  flex: 1;
+}
+
+/* Placeholder pages styling */
+.placeholder-page {
+  background-color: white;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.placeholder-page h1 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.placeholder-page p {
+  color: #555;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .nav-link,
+  .profile-link,
+  .logout-button {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-link span,
+  .profile-link span,
+  .logout-button span {
+    display: none; /* Hide text, show only icons at small sizes */
+  }
+
+  .nav-link,
+  .profile-link,
+  .logout-button {
+    padding: 6px;
+    font-size: 16px; /* Keep icon size readable */
+  }
+
+  .header {
+    padding: 10px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nav-link,
+  .profile-link,
+  .logout-button {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .header {
+    margin: 5px;
+    padding: 10px 15px;
+  }
+}
+
+/* ====== Dashboard Layout Specific Styles ====== */
+.dashboard-container .header {
+  background-color: #1a202c;
+  padding: 15px 20px 10px;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 8px;
+  position: sticky;
+  top: 10px;
+  z-index: 100;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: calc(100% - 20px);
+  box-sizing: border-box;
+}
+
+.dashboard-container .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  justify-content: center;
+}
+
+.dashboard-container .logo:hover {
+  transform: scale(1.05);
+}
+
+.dashboard-container .nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 5px 0;
+}
+
+/* Equal spacing for trainer navigation */
+[data-role="trainer"] .nav {
+  gap: 25px;
+}
+
+/* Hide scrollbar but keep functionality */
+.dashboard-container .nav {
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.dashboard-container .nav::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Enhanced profile button */
+.dashboard-container .profile-link {
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 6px 12px;
+  transition: all 0.2s ease;
+  margin-left: 5px;
+}
+
+.dashboard-container .profile-link:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Enhanced logout button */
+.dashboard-container .logout-button {
+  background-color: rgba(255, 71, 87, 0.1);
+  border: 1px solid rgba(255, 71, 87, 0.2);
+  border-radius: 6px;
+  padding: 6px 12px;
+  transition: all 0.2s ease;
+  color: #ff4757;
+  margin-left: 5px;
+}
+
+.dashboard-container .logout-button:hover {
+  background-color: rgba(255, 71, 87, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dashboard-container .nav {
+    gap: 8px;
+  }
+
+  [data-role="trainer"] .nav {
+    gap: 15px;
+  }
+}

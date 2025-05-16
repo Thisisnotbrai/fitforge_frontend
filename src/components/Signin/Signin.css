@@ -1,0 +1,184 @@
+:root {
+  --backgroundColor: #102542; /* Dark Blue as the background */
+  --colorShadeA: #f87060; /* Desert Sand as the primary shade */
+  --colorShadeB: #ff8c7a; /* A lighter shade of Desert Sand */
+  --colorShadeC: #ffa894; /* A medium shade of Desert Sand */
+  --colorShadeD: #ffc4ad; /* A lighter shade of Desert Sand */
+  --colorShadeE: #ffe0c7; /* The lightest shade of Desert Sand */
+}
+
+.Logo-container {
+  display: flex; /* Arrange items in a row */
+  align-items: center; /* Align vertically */
+  gap: 10px; /* Adds spacing between the logo and text */
+}
+
+.fit-text {
+  color: #102542; /* Custom color for "Fit" */
+  font-weight: bold;
+}
+
+.forge-text {
+  color: #ff1900; /* Custom color for "Forge" */
+  font-weight: bold;
+}
+
+.Logo-container h2 {
+  font-size: 30px;
+  font-weight: bold;
+  color: #ff1900;
+  margin: 0; /* Remove extra margins */
+}
+.Logo-container .Logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+.login-section {
+  flex: 1;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  padding: 40px;
+}
+
+.form-container {
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px;
+}
+
+.form-title {
+  font-size: 30px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  text-align: left;
+  color: #ff1900;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #102542;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 10px;
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  padding: 1em 2em;
+  border: 2px solid var(--colorShadeA);
+  border-radius: 1em;
+  background: var(--colorShadeE);
+  transform-style: preserve-3d;
+  transition: all 175ms cubic-bezier(0, 0, 1, 1);
+  margin-bottom: 10px;
+  color: #ff1900;
+  font-weight: bolder;
+}
+.submit-button:before {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--colorShadeC);
+  border-radius: inherit;
+  box-shadow: 0 0 0 2px var(--colorShadeB);
+  transform: translate3d(0, 0.75em, -1em);
+  transition: all 175ms cubic-bezier(0, 0, 1, 1);
+}
+
+.submit-button:hover {
+  background: var(--colorShadeD);
+  transform: translate(0, 0.375em);
+}
+.submit-button:hover:before {
+  transform: translate3d(0, 0.75em, -1em);
+}
+.submit-button:active::before {
+  transform: translate3d(0, 0, -1em);
+
+  box-shadow: 0 0 0 2px var(--colorShadeB), 0 0.25em 0 0 var(--colorShadeB);
+}
+
+.signup-text {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.signup-link {
+  color: #ff1900;
+  text-decoration: none;
+  font-weight: bolder;
+}
+
+.signup-link:hover {
+  text-decoration: underline;
+}
+
+.login-hero {
+  width: 65%; /* Adjust to make it take up half the space */
+  height: 93%;
+  border-radius: 25px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  margin-top: 25px;
+}
+
+.error-message {
+  color: #d32f2f;
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.approval-pending-message {
+  background-color: #fff8e1;
+  border-left: 4px solid #ffb300;
+  color: #333;
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 4px;
+}
+
+.approval-pending-message h3 {
+  color: #f57c00;
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+
+.approval-pending-message p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.success-message {
+  color: #4caf50;
+  font-size: 14px;
+  background-color: rgba(76, 175, 80, 0.1);
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  text-align: center;
+}

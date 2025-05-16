@@ -1,0 +1,313 @@
+.active-workout-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: calc(100vh - 80px);
+  background-color: #23293A;
+}
+
+.workout-progress {
+  background-color: #1B202B;
+  padding: 2.5rem 2rem 2rem 2rem;
+  border-radius: 16px;
+  margin-bottom: 2.5rem;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(201,123,99,0.10);
+  border: none;
+}
+
+.workout-progress h3 {
+  margin-top: 0;
+  font-size: 2rem;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  font-family: 'Montserrat', 'Poppins', 'Segoe UI', Arial, sans-serif;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.progress-bar {
+  height: 10px;
+  background-color: #23293A;
+  border-radius: 5px;
+  margin: 1rem 0 0.5rem 0;
+  overflow: hidden;
+  box-shadow: none;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #C97B63;
+  border-radius: 5px;
+  transition: width 0.5s ease;
+  background-image: none;
+  animation: none;
+}
+
+.progress-text {
+  font-size: 1rem;
+  color: #b0b8c1;
+  margin-top: 0.5rem;
+  font-family: 'Montserrat', 'Poppins', 'Segoe UI', Arial, sans-serif;
+}
+
+/* Exercise Screen Styles */
+.exercise-screen {
+  text-align: center;
+  padding: 20px;
+}
+
+.set-counter {
+  font-size: 1.2rem;
+  margin: 15px 0;
+}
+
+.exercise-instructions {
+  font-size: 1.5rem;
+  margin: 20px 0;
+}
+
+.btn-complete-set {
+  padding: 15px 30px;
+  background-color: #C97B63;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin: 20px 0;
+}
+
+.exercise-position {
+  margin-top: 30px;
+  color: #777;
+}
+
+/* Rest Timer Styles */
+.rest-timer {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.timer-display {
+  font-size: 5rem;
+  font-weight: bold;
+  margin: 30px 0;
+}
+
+.next-exercise {
+  font-size: 1.2rem;
+  margin-top: 20px;
+}
+
+/* Workout Complete Styles */
+.workout-complete {
+  background-color: #1B202B;
+  padding: 3rem 2.5rem;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(52,152,219,0.10);
+  max-width: 600px;
+  margin: 3rem auto;
+  border: none;
+  animation: slide-up 0.5s;
+}
+
+.workout-complete h2 {
+  font-size: 2.2rem;
+  margin: 1rem 0 1.5rem;
+  color: #27ae60;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'Montserrat', 'Poppins', 'Segoe UI', Arial, sans-serif;
+}
+
+.completion-icon {
+  font-size: 3.5rem;
+  color: #fff;
+  background-color: #C97B63;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 1.5rem;
+  animation: scale-in 0.5s;
+  box-shadow: 0 6px 15px rgba(39, 174, 96, 0.3);
+}
+
+.completion-details {
+  font-size: 1.1rem;
+  color: #b0b8c1;
+  margin: 2rem 0;
+  line-height: 1.6;
+  background-color: #23293A;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: none;
+  text-align: left;
+  border: 1px solid #C97B63;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.detail-item:last-child {
+  margin-bottom: 0;
+}
+
+.detail-icon {
+  color: #C97B63;
+  margin-right: 0.75rem;
+  font-size: 1.25rem;
+}
+
+.detail-item span {
+  flex: 1;
+  color: #b0b8c1;
+  font-size: 1rem;
+}
+
+.detail-item strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-finish {
+  background-color: #C97B63;
+  font-size: 1.1rem;
+  padding: 1rem 2.5rem;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(52, 152, 219, 0.18);
+  margin-top: 1.5rem;
+  font-family: 'Montserrat', 'Poppins', 'Segoe UI', Arial, sans-serif;
+}
+
+.btn-finish:hover {
+  background-color: #3498db;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(52, 152, 219, 0.22);
+}
+
+.loading-container,
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  font-size: 1.2rem;
+  color: #5f6368;
+}
+
+.error-container {
+  color: #e74c3c;
+}
+
+.workout-time {
+  display: inline-block;
+  margin-left: 12px;
+  background-color: rgba(52, 152, 219, 0.1);
+  color: #3498db;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .active-workout-container {
+    padding: 1rem;
+  }
+
+  .workout-progress {
+    padding: 1.5rem;
+  }
+
+  .workout-progress h3 {
+    font-size: 1.4rem;
+  }
+}
+
+/* Styles for custom workout timers */
+.custom-timer-container {
+  background-color: white;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.custom-timer-display {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #3498db;
+  margin: 1.5rem 0;
+}
+
+.custom-timer-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.custom-timer-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 100px;
+}
+
+.custom-timer-btn:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+.custom-timer-btn.reset {
+  background-color: #e74c3c;
+}
+
+.custom-timer-btn.reset:hover {
+  background-color: #c0392b;
+}
+
+/* Added indicators for user-created workouts */
+.user-workout-indicator {
+  background-color: rgba(39, 174, 96, 0.1);
+  color: #27ae60;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  border-left: 3px solid #27ae60;
+}
+
+/* Exercise counter badge */
+.exercise-counter {
+  display: inline-block;
+  background-color: #3498db;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.3rem 0.6rem;
+  border-radius: 30px;
+  margin-left: 0.8rem;
+}

@@ -1,0 +1,55 @@
+.trainer-verification-modal {
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+}
+
+.trainer-verification-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.trainer-verification-icon {
+  background-color: #4f46e5; /* Same color as verification button */
+  color: white;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  margin-bottom: 20px;
+}
+
+.trainer-verification-modal h2 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.trainer-verification-modal p {
+  color: #666;
+  margin-bottom: 15px;
+  line-height: 1.5;
+  max-width: 400px;
+}
+
+.trainer-verification-button {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 30px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+}
+
+.trainer-verification-button:hover {
+  background-color: #4338ca;
+} 

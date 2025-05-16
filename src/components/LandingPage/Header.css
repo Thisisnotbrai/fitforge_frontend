@@ -1,0 +1,132 @@
+.land-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  background: #0f172a;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  box-sizing: border-box;
+  transition: padding 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Create a smaller header when scrolling */
+.land-header.scrolled {
+  padding: 10px 40px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.land-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between logo and text */
+  font-size: 28px; /* Increased font size */
+  font-weight: bold;
+  font-family: "Bebas Neue", sans-serif; /* Optional: Use a modern font */
+}
+
+.logo-icon {
+  border-radius: 10px;
+  width: 40px; /* Adjust size as needed */
+  height: auto; /* Maintains aspect ratio */
+}
+
+.land-nav {
+  display: flex;
+  align-items: center;
+}
+
+.land-nav a {
+  position: relative;
+  text-decoration: none;
+  color: white; /* Default text color */
+  font-family: "Roboto", sans-serif; /* Modern font */
+  margin: 0 15px; /* Space between links */
+  padding: 10px 15px;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.land-nav a:hover {
+  color: #edc9af; /* Desert Sand color on hover */
+}
+
+.land-nav a::after {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 0%;
+  content: "";
+  background: #edc9af; /* Desert Sand underline */
+  height: 2px;
+  transition: width 0.3s ease;
+}
+
+.land-nav a:hover::after {
+  width: 100%;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.sign-in,
+.sign-up {
+  background: none;
+  border: 1px solid white;
+  padding: 8px 15px;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  font-family: "Roboto", sans-serif;
+  transition: all 0.3s ease; /* Smooth transition */
+}
+
+.sign-up {
+  background: white;
+  color: black;
+}
+
+/* Swap styles on hover */
+.sign-in:hover {
+  background: white;
+  color: black;
+}
+
+.sign-up:hover {
+  background: none;
+  color: white;
+}
+
+.fit {
+  color: white; /* Yellow */
+  font-weight: bold;
+}
+
+.forge {
+  color: #f87060; /* Orange-Red */
+  font-weight: bold;
+}
+
+/* Responsive adjustments for sticky header */
+@media (max-width: 768px) {
+  .land-header {
+    padding: 12px 20px;
+  }
+
+  .land-header.scrolled {
+    padding: 8px 20px;
+  }
+
+  .land-nav {
+    display: none; /* Hide nav on small screens */
+  }
+
+  /* Add mobile menu button here if needed */
+}

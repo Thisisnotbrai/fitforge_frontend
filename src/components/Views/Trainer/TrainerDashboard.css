@@ -1,0 +1,532 @@
+/* TrainerDashboard.css - Professional styling by an experienced front-end developer */
+
+:root {
+  --primary-color: #2563eb;
+  --primary-light: #3b82f6;
+  --primary-dark: #1d4ed8;
+  --primary-bg: #f0f7ff;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --danger-color: #ef4444;
+  --neutral-50: #f9fafb;
+  --neutral-100: #f3f4f6;
+  --neutral-200: #e5e7eb;
+  --neutral-300: #d1d5db;
+  --neutral-400: #9ca3af;
+  --neutral-500: #6b7280;
+  --neutral-600: #4b5563;
+  --neutral-700: #374151;
+  --neutral-800: #1f2937;
+  --neutral-900: #111827;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --radius-sm: 0.25rem;
+  --radius: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --transition: all 0.2s ease;
+}
+
+.trainer-dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  color: var(--neutral-800);
+  background-color: var(--neutral-50);
+  min-height: calc(100vh - 80px);
+}
+
+.dashboard-header {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.dashboard-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--neutral-900);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.025em;
+}
+
+.trainer-welcome {
+  font-size: 1.125rem;
+  color: var(--neutral-600);
+}
+
+.trainer-welcome .sub-text {
+  font-size: 0.875rem;
+  color: var(--neutral-500);
+  margin-top: 0.5rem;
+}
+
+/* Section tabs */
+.section-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.section-tab {
+  background-color: var(--neutral-100);
+  border: 1px solid var(--neutral-200);
+  color: var(--neutral-700);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  min-width: 120px;
+}
+
+.section-tab:hover {
+  background-color: var(--neutral-200);
+  color: var(--neutral-800);
+}
+
+.section-tab.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-md);
+}
+
+/* Tabs navigation */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--neutral-200);
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  -ms-overflow-style: none;
+  padding-bottom: 1px;
+}
+
+.tabs::-webkit-scrollbar {
+  height: 4px;
+}
+
+.tabs::-webkit-scrollbar-track {
+  background: var(--neutral-100);
+}
+
+.tabs::-webkit-scrollbar-thumb {
+  background-color: var(--neutral-300);
+  border-radius: 20px;
+}
+
+.tab {
+  padding: 0.75rem 1.25rem;
+  background: none;
+  border: none;
+  color: var(--neutral-600);
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: var(--primary-color);
+}
+
+.tab.active {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary-color);
+}
+
+/* Booking cards */
+.bookings-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.booking-card {
+  background-color: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: var(--transition);
+  border-top: 4px solid var(--primary-light);
+}
+
+.booking-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.booking-card.status-pending {
+  border-top-color: var(--warning-color);
+}
+
+.booking-card.status-confirmed {
+  border-top-color: var(--primary-color);
+}
+
+.booking-card.status-completed {
+  border-top-color: var(--success-color);
+}
+
+.booking-card.status-cancelled {
+  border-top-color: var(--danger-color);
+}
+
+.booking-header {
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--neutral-100);
+}
+
+.booking-date h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--neutral-900);
+  margin: 0 0 0.5rem 0;
+}
+
+.booking-date p {
+  font-size: 0.9rem;
+  color: var(--neutral-500);
+  margin: 0;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.status-badge.pending {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: var(--warning-color);
+}
+
+.status-badge.confirmed {
+  background-color: rgba(37, 99, 235, 0.1);
+  color: var(--primary-color);
+}
+
+.status-badge.completed {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--success-color);
+}
+
+.status-badge.cancelled {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--danger-color);
+}
+
+.booking-details {
+  padding: 1.5rem;
+}
+
+.booking-details h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--neutral-800);
+  margin: 0 0 1rem 0;
+}
+
+.booking-details p {
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+  color: var(--neutral-700);
+}
+
+.booking-details strong {
+  font-weight: 600;
+  color: var(--neutral-800);
+}
+
+.booking-notes {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--neutral-100);
+}
+
+.booking-actions {
+  padding: 1rem 1.5rem;
+  display: flex;
+  gap: 1rem;
+  background-color: var(--neutral-50);
+  border-top: 1px solid var(--neutral-100);
+}
+
+.confirm-btn,
+.complete-btn,
+.cancel-btn,
+.pause-btn,
+.terminate-btn,
+.activate-btn {
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius);
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition);
+  flex: 1;
+  border: none;
+}
+
+.confirm-btn {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.confirm-btn:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.complete-btn {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.complete-btn:hover {
+  background-color: #0ea271;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.cancel-btn {
+  background-color: white;
+  color: var(--danger-color);
+  border: 1px solid var(--danger-color);
+}
+
+.cancel-btn:hover {
+  background-color: rgba(239, 68, 68, 0.05);
+  transform: translateY(-1px);
+}
+
+.pause-btn {
+  background-color: white;
+  color: var(--warning-color);
+  border: 1px solid var(--warning-color);
+}
+
+.pause-btn:hover {
+  background-color: rgba(245, 158, 11, 0.05);
+  transform: translateY(-1px);
+}
+
+.terminate-btn {
+  background-color: white;
+  color: var(--danger-color);
+  border: 1px solid var(--danger-color);
+}
+
+.terminate-btn:hover {
+  background-color: rgba(239, 68, 68, 0.05);
+  transform: translateY(-1px);
+}
+
+.activate-btn {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.activate-btn:hover {
+  background-color: #0ea271;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.no-actions {
+  padding: 0.75rem;
+  color: var(--neutral-500);
+  font-size: 0.9rem;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Partnership cards */
+.partnerships-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.partnership-card {
+  background-color: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: var(--transition);
+  border-top: 4px solid var(--primary-light);
+}
+
+.partnership-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.partnership-card.status-active {
+  border-top-color: var(--success-color);
+}
+
+.partnership-card.status-paused {
+  border-top-color: var(--warning-color);
+}
+
+.partnership-card.status-terminated {
+  border-top-color: var(--danger-color);
+}
+
+.partnership-header {
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--neutral-100);
+}
+
+.partnership-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--neutral-900);
+  margin: 0 0 0.5rem 0;
+}
+
+.partnership-info p {
+  font-size: 0.9rem;
+  color: var(--neutral-500);
+  margin: 0;
+}
+
+.partnership-details {
+  padding: 1.5rem;
+}
+
+.partnership-details h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--neutral-800);
+  margin: 0 0 1rem 0;
+}
+
+.partnership-details p {
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+  color: var(--neutral-700);
+}
+
+.partnership-details strong {
+  font-weight: 600;
+  color: var(--neutral-800);
+}
+
+.partnership-notes {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--neutral-100);
+}
+
+.partnership-actions {
+  padding: 1rem 1.5rem;
+  display: flex;
+  gap: 1rem;
+  background-color: var(--neutral-50);
+  border-top: 1px solid var(--neutral-100);
+}
+
+.no-bookings,
+.no-partnerships {
+  text-align: center;
+  padding: 3rem 2rem;
+  background-color: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+  color: var(--neutral-500);
+  font-size: 1.1rem;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  font-size: 1.2rem;
+  color: var(--neutral-600);
+}
+
+.error-message {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-left: 4px solid var(--danger-color);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  color: var(--danger-color);
+  margin: 2rem 0;
+  font-weight: 500;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .trainer-dashboard {
+    padding: 1.5rem 1rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 2rem;
+  }
+
+  .bookings-list,
+  .partnerships-list {
+    grid-template-columns: 1fr;
+  }
+
+  .booking-actions,
+  .partnership-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-tabs {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .section-tab {
+    width: 100%;
+  }
+
+  .tabs {
+    padding-bottom: 0.5rem;
+  }
+
+  .tab {
+    padding: 0.5rem 1rem;
+  }
+}

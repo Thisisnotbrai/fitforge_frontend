@@ -1,0 +1,46 @@
+.chatbot-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  transition: transform 0.3s, background-color 0.3s;
+  overflow: hidden;
+  padding: 0;
+}
+
+.chatbot-toggle:hover {
+  background-color: #c0392b;
+  transform: scale(1.05);
+}
+
+.chatbot-toggle.open {
+  background-color: #ef4444;
+}
+
+.chatbot-toggle.open:hover {
+  background-color: #dc2626;
+}
+
+.toggle-image {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .chatbot-toggle {
+    width: 50px;
+    height: 50px;
+  }
+} 
