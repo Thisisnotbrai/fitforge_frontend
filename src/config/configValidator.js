@@ -3,7 +3,7 @@
  * This utility validates configuration settings and provides warnings for missing values
  */
 
-import config from './config';
+import config from './config.js';
 
 export const validateConfig = () => {
   const warnings = [];
