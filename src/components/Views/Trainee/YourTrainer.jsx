@@ -17,6 +17,7 @@ const YourTrainer = () => {
   // Fetch user data, partnership, and trainer data
   useEffect(() => {
     const fetchTrainerData = async () => {
+      const apiUrl = import.meta.env.VITE_API_URL;
       try {
         setLoading(true);
 
@@ -42,7 +43,7 @@ const YourTrainer = () => {
 
         // Fetch partnerships for this trainee using API with authentication
         const partnershipResponse = await axios.get(
-          `http://localhost:3000/partnership/trainee/${user.id}`,
+          `${apiUrl}/partnership/trainee/${user.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -89,6 +90,7 @@ const YourTrainer = () => {
 
   // Fetch workouts created by the trainer for this trainee
   const fetchTrainerWorkouts = async (traineeId) => {
+    const apiUrl = import.meta.env.VITE_API_URL;
     try {
       setLoadingWorkouts(true);
       const token = localStorage.getItem("token");
@@ -99,7 +101,7 @@ const YourTrainer = () => {
 
       // Fetch trainee workouts
       const response = await axios.get(
-        `http://localhost:3000/trainee/my-workouts`,
+        `${apiUrl}/trainee/my-workouts`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -126,6 +128,7 @@ const YourTrainer = () => {
   // Handle partnership status change
   const handlePartnershipStatusChange = async (newStatus) => {
     try {
+      const apiUrl = import.meta.env.VITE_API_URL;
       // Get authentication token (same as used in useEffect)
       const token = localStorage.getItem("token");
       if (!token) {
@@ -138,7 +141,7 @@ const YourTrainer = () => {
 
       // Make the API call to update partnership status
       await axios.put(
-        `http://localhost:3000/partnership/${partnership.id}/status`,
+        `${apiUrl}/partnership/${partnership.id}/status`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );

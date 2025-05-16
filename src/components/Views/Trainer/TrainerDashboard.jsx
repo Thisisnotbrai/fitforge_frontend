@@ -10,7 +10,7 @@ const TrainerDashboard = () => {
   const [error, setError] = useState(null);
   const [currentTrainer, setCurrentTrainer] = useState(null);
   const [activeSection, setActiveSection] = useState("bookings"); // "bookings" or "partnerships"
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -39,7 +39,7 @@ const TrainerDashboard = () => {
 
         // Fetch bookings for this trainer
         const bookingsResponse = await axios.get(
-          `http://localhost:3000/booking/trainer/${user.id}`,
+          `${apiUrl}/booking/trainer/${user.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -47,7 +47,7 @@ const TrainerDashboard = () => {
 
         // Fetch partnerships for this trainer
         const partnershipsResponse = await axios.get(
-          `http://localhost:3000/partnership/trainer/${user.id}`,
+          `${apiUrl}/partnership/trainer/${user.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -77,7 +77,7 @@ const TrainerDashboard = () => {
     };
 
     fetchData();
-  }, []);
+  }, [apiUrl]);
 
   // Handle booking status update
   const updateBookingStatus = async (bookingId, newStatus) => {
@@ -86,7 +86,7 @@ const TrainerDashboard = () => {
       if (!token) throw new Error("Not authenticated");
 
       await axios.put(
-        `http://localhost:3000/booking/${bookingId}/status`,
+        `${apiUrl}/booking/${bookingId}/status`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -104,7 +104,7 @@ const TrainerDashboard = () => {
         const user = JSON.parse(localStorage.getItem("user"));
 
         const partnershipsResponse = await axios.get(
-          `http://localhost:3000/partnership/trainer/${user.id}`,
+          `${apiUrl}/partnership/trainer/${user.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -133,7 +133,7 @@ const TrainerDashboard = () => {
       if (!token) throw new Error("Not authenticated");
 
       await axios.put(
-        `http://localhost:3000/partnership/${partnershipId}/status`,
+        `${apiUrl}/partnership/${partnershipId}/status`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );

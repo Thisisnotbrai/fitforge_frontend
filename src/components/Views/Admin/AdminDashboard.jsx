@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AdminDashboard.css";
@@ -40,6 +40,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const apiUrl = import.meta.env.VITE_API_URL;
   // New states for analytics data
   const [userAnalytics, setUserAnalytics] = useState({
     totalUsers: 0,
@@ -71,46 +72,27 @@ const AdminDashboard = () => {
   const [showUserDetails, setShowUserDetails] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    checkAdminAuth();
-    fetchPendingTrainers();
-    fetchTrainers();
-    fetchTrainees();
-    fetchAnalyticsData();
-  }, []);
-  
-  // Update analytics when user data changes
-  useEffect(() => {
-    if (trainers.length > 0 || trainees.length > 0 || pendingTrainers.length > 0) {
-      // Force refresh of analytics after user data is loaded
-      const mockStats = generateMockUserStats();
-      if (mockStats.data && mockStats.data.data) {
-        setUserAnalytics(mockStats.data.data);
-      }
-    }
-  }, [trainers, trainees, pendingTrainers]);
-
-  // Check if user is admin before allowing access
-  const checkAdminAuth = () => {
+  // Wrap checkAdminAuth in useCallback
+  const checkAdminAuth = useCallback(() => {
     const token = localStorage.getItem("token");
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     
     if (!token || user.role !== "admin") {
       navigate("/admin/login");
     }
-  };
+  }, [navigate]);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     // Clear user data from localStorage
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     
     // Navigate to admin login page
     navigate("/admin/login");
-  };
+  }, [navigate]);
 
-  // Fetch analytics data from backend
-  const fetchAnalyticsData = async () => {
+  // Wrap fetchAnalyticsData in useCallback
+  const fetchAnalyticsData = useCallback(async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
@@ -121,16 +103,13 @@ const AdminDashboard = () => {
         return;
       }
       
-      const apiBaseUrl = "http://localhost:3000/api/admin";
-      
       // Function to handle API requests with fallback to mock data
       const fetchWithFallback = async (endpoint, mockDataGenerator) => {
         try {
-          const response = await axios.get(`${apiBaseUrl}${endpoint}`, {
+          const response = await axios.get(`${apiUrl}${endpoint}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           
-          // Check if response data is valid
           if (response && response.data && response.data.success) {
             console.log(`Successfully fetched data from ${endpoint}`);
             return response.data.data;
@@ -208,9 +187,50 @@ const AdminDashboard = () => {
       setError("Failed to fetch analytics data");
       setLoading(false);
     }
-  };
+  }, [apiUrl, generateMockUserStats, setError, setLoading, setUserAnalytics]);
 
-  const fetchPendingTrainers = async () => {
+  // Wrap generateMockUserStats in useCallback
+  const generateMockUserStats = useCallback(() => {
+    const trainerCount = trainers.length || Math.floor(Math.random() * 5) + 1;
+    const traineeCount = trainees.length || Math.floor(Math.random() * 10) + 1;
+    const pendingCount = pendingTrainers.length || Math.floor(Math.random() * 3);
+    const totalUsers = trainerCount + traineeCount + pendingCount;
+    
+    return {
+      data: {
+        success: true,
+        data: {
+          totalUsers,
+          traineeCount,
+          trainerCount, 
+          pendingCount,
+          registrationTrend: generateRegistrationTrend()
+        }
+      }
+    };
+  }, [trainers.length, trainees.length, pendingTrainers.length]);
+
+  // Update useEffect with dependencies
+  useEffect(() => {
+    checkAdminAuth();
+    fetchPendingTrainers();
+    fetchTrainers();
+    fetchTrainees();
+    fetchAnalyticsData();
+  }, [checkAdminAuth, fetchPendingTrainers, fetchTrainers, fetchTrainees, fetchAnalyticsData]);
+
+  // Update useEffect with generateMockUserStats dependency
+  useEffect(() => {
+    if (trainers.length > 0 || trainees.length > 0 || pendingTrainers.length > 0) {
+      const mockStats = generateMockUserStats();
+      if (mockStats.data && mockStats.data.data) {
+        setUserAnalytics(mockStats.data.data);
+      }
+    }
+  }, [trainers, trainees, pendingTrainers, generateMockUserStats]);
+
+  // Wrap fetchPendingTrainers in useCallback
+  const fetchPendingTrainers = useCallback(async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
@@ -222,7 +242,7 @@ const AdminDashboard = () => {
       }
       
       const response = await axios.get(
-        "http://localhost:3000/users/pending-trainers",
+        `${apiUrl}/users/pending-trainers`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -243,9 +263,10 @@ const AdminDashboard = () => {
       );
       setLoading(false);
     }
-  };
+  }, [apiUrl, setError, setLoading, setPendingTrainers]);
 
-  const fetchTrainers = async () => {
+  // Wrap fetchTrainers in useCallback
+  const fetchTrainers = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
       
@@ -255,7 +276,7 @@ const AdminDashboard = () => {
       }
       
       const response = await axios.get(
-        "http://localhost:3000/users/trainers",
+        `${apiUrl}/users/trainers`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -271,9 +292,10 @@ const AdminDashboard = () => {
     } catch (err) {
       console.error("Error fetching trainers:", err);
     }
-  };
+  }, [apiUrl, setError, setTrainers]);
 
-  const fetchTrainees = async () => {
+  // Wrap fetchTrainees in useCallback
+  const fetchTrainees = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
       
@@ -283,7 +305,7 @@ const AdminDashboard = () => {
       }
       
       const response = await axios.get(
-        "http://localhost:3000/users/trainees",
+        `${apiUrl}/users/trainees`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -299,9 +321,10 @@ const AdminDashboard = () => {
     } catch (err) {
       console.error("Error fetching trainees:", err);
     }
-  };
+  }, [apiUrl, setError, setTrainees]);
 
   const approveTrainer = async (trainerId) => {
+    const apiUrl = import.meta.env.VITE_API_URL;
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
@@ -313,7 +336,7 @@ const AdminDashboard = () => {
       }
       
       const response = await axios.put(
-        `http://localhost:3000/users/approve/${trainerId}`,
+        `${apiUrl}/users/approve/${trainerId}`,
         {},
         {
           headers: {
@@ -360,7 +383,7 @@ const AdminDashboard = () => {
       }
       
       const response = await axios.put(
-        `http://localhost:3000/users/suspend/${userId}`,
+        `${apiUrl}/users/suspend/${userId}`,
         {},
         {
           headers: {
@@ -873,27 +896,6 @@ const AdminDashboard = () => {
         count
       };
     });
-  };
-
-  // Generate mock user statistics
-  const generateMockUserStats = () => {
-    const trainerCount = trainers.length || Math.floor(Math.random() * 5) + 1;
-    const traineeCount = trainees.length || Math.floor(Math.random() * 10) + 1;
-    const pendingCount = pendingTrainers.length || Math.floor(Math.random() * 3);
-    const totalUsers = trainerCount + traineeCount + pendingCount;
-    
-    return {
-      data: {
-        success: true,
-        data: {
-          totalUsers,
-          traineeCount,
-          trainerCount, 
-          pendingCount,
-          registrationTrend: generateRegistrationTrend()
-        }
-      }
-    };
   };
 
   useEffect(() => {

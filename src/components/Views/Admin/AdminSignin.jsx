@@ -14,7 +14,7 @@ const AdminSignin = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3000/users/login", {
+      const response = await axios.post("${apiUrl}/users/login", {
         user_email,
         user_password,
       });

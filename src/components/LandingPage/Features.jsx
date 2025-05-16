@@ -14,7 +14,7 @@ const Features = () => {
             <p>
               As passionate designers and developers, we love building products
               that are easy, usable, neat, and appealing. We explore, design,
-              and code for your business's success. Unikorns means people who
+              and code for your business success. Unikorns means people who
               care about quality and professional relationships.
             </p>
           </div>

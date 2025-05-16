@@ -25,7 +25,7 @@ const Signin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    const apiUrl = import.meta.env.VITE_API_URL;
     try {
       console.log("Attempting login for:", user_email);
       
@@ -33,7 +33,7 @@ const Signin = () => {
       setError("");
       setPendingApproval(false);
       
-      const response = await axios.post("http://localhost:3000/users/login", {
+      const response = await axios.post(`${apiUrl}/users/login`, {
         user_email,
         user_password,
       });

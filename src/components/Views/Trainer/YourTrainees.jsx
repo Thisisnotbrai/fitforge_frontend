@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUserFriends,
@@ -45,6 +45,49 @@ const YourTrainees = () => {
   const [exercises, setExercises] = useState([]);
   const [showExercisesModal, setShowExercisesModal] = useState(false);
   const [loadingExercises, setLoadingExercises] = useState(false);
+  const apiUrl = import.meta.env.VITE_API_URL;
+
+  // Fetch workouts for a trainee
+  const fetchTraineeWorkouts = useCallback(async (traineeId) => {
+    try {
+      setLoadingWorkouts(true);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Not authenticated");
+      }
+
+      // We'll use the TraineeWorkout endpoint to get workouts created for this trainee
+      const response = await axios.get(
+        `${apiUrl}/trainee/my-workouts`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "X-Trainee-Id": traineeId, // Custom header to pass trainee ID
+          },
+        }
+      );
+
+      if (response.data && response.data.success) {
+        const allWorkouts = response.data.data || [];
+
+        // Separate trainer-created and trainee-created workouts
+        const trainerWorkouts = allWorkouts.filter(
+          (workout) => workout.created_by_trainer
+        );
+        const traineeWorkouts = allWorkouts.filter(
+          (workout) => !workout.created_by_trainer
+        );
+
+        setTrainerCreatedWorkouts(trainerWorkouts);
+        setTraineeCreatedWorkouts(traineeWorkouts);
+      }
+    } catch (err) {
+      console.error("Error fetching trainee workouts:", err);
+      // Don't show error to user, just log it
+    } finally {
+      setLoadingWorkouts(false);
+    }
+  }, [apiUrl, setLoadingWorkouts, setTrainerCreatedWorkouts, setTraineeCreatedWorkouts]);
 
   useEffect(() => {
     const fetchTrainees = async () => {
@@ -74,7 +117,7 @@ const YourTrainees = () => {
 
         // Fetch partnerships for this trainer
         const partnershipResponse = await axios.get(
-          `http://localhost:3000/partnership/trainer/${user.id}`,
+          `${apiUrl}/partnership/trainer/${user.id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -111,56 +154,14 @@ const YourTrainees = () => {
     };
 
     fetchTrainees();
-  }, []);
+  }, [apiUrl, setTrainees, setSelectedTrainee, setLoading, setError]);
 
   // Fetch trainee workouts when a trainee is selected
   useEffect(() => {
     if (selectedTrainee) {
       fetchTraineeWorkouts(selectedTrainee.id);
     }
-  }, [selectedTrainee]);
-
-  // Fetch workouts for a trainee
-  const fetchTraineeWorkouts = async (traineeId) => {
-    try {
-      setLoadingWorkouts(true);
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Not authenticated");
-      }
-
-      // We'll use the TraineeWorkout endpoint to get workouts created for this trainee
-      const response = await axios.get(
-        `http://localhost:3000/trainee/my-workouts`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "X-Trainee-Id": traineeId, // Custom header to pass trainee ID
-          },
-        }
-      );
-
-      if (response.data && response.data.success) {
-        const allWorkouts = response.data.data || [];
-
-        // Separate trainer-created and trainee-created workouts
-        const trainerWorkouts = allWorkouts.filter(
-          (workout) => workout.created_by_trainer
-        );
-        const traineeWorkouts = allWorkouts.filter(
-          (workout) => !workout.created_by_trainer
-        );
-
-        setTrainerCreatedWorkouts(trainerWorkouts);
-        setTraineeCreatedWorkouts(traineeWorkouts);
-      }
-    } catch (err) {
-      console.error("Error fetching trainee workouts:", err);
-      // Don't show error to user, just log it
-    } finally {
-      setLoadingWorkouts(false);
-    }
-  };
+  }, [selectedTrainee, fetchTraineeWorkouts]);
 
   // Handle partnership status change
   const handlePartnershipStatusChange = async (partnershipId, newStatus) => {
@@ -173,7 +174,7 @@ const YourTrainees = () => {
 
       // Make the API call to update partnership status
       await axios.put(
-        `http://localhost:3000/partnership/${partnershipId}/status`,
+        `${apiUrl}/partnership/${partnershipId}/status`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -215,7 +216,7 @@ const YourTrainees = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        "http://localhost:3000/trainee/create-workout-for-trainee",
+        "${apiUrl}/trainee/create-workout-for-trainee",
         {
           trainee_id: selectedTrainee.id,
           ...newWorkout,
@@ -265,7 +266,7 @@ const YourTrainees = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        "http://localhost:3000/exercises/create",
+        "${apiUrl}/exercises/create",
         {
           ...newExercise,
           workout_id: selectedWorkout.id,
@@ -311,7 +312,7 @@ const YourTrainees = () => {
       }
 
       const response = await axios.get(
-        `http://localhost:3000/exercises/workout/${workoutId}`,
+        `${apiUrl}/exercises/workout/${workoutId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -341,7 +342,7 @@ const YourTrainees = () => {
         throw new Error("Not authenticated");
       }
 
-      await axios.delete(`http://localhost:3000/exercises/${exerciseId}`, {
+      await axios.delete(`${apiUrl}/exercises/${exerciseId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

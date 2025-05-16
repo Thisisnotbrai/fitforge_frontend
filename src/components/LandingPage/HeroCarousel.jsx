@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import slide1 from '../../assets/slide1.jpg'; // Import image 1
 import slide2 from '../../assets/slide2.jpg'; // Import image 2
 import slide3 from '../../assets/slide3.jpg'; // Import image 3
@@ -30,7 +30,7 @@ const HeroCarousel = () => {
       title: "Unleash Your Potential",
       subtitle: "Elevated Living",
       description:
-        "Push your limits with expert coaching and top-tier equipment. Join a community that’s passionate, determined, and supportive—just like you.",
+        "Push your limits with expert coaching and top-tier equipment. Join a community that's passionate, determined, and supportive—just like you.",
       buttonText: "Learn more",
     },
     {
@@ -44,22 +44,20 @@ const HeroCarousel = () => {
     // Add more slides as needed
   ];
 
-  const goToNextSlide = () => {
+  const goToNextSlide = useCallback(() => {
     setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
-  };
+  }, [slides.length]);
 
-  const goToPrevSlide = () => {
+  const goToPrevSlide = useCallback(() => {
     setCurrentSlide((prevSlide) => (prevSlide - 1 + slides.length) % slides.length);
-  };
+  }, [slides.length]);
 
   // Auto-slide functionality
   useEffect(() => {
-    const interval = setInterval(() => {
-      goToNextSlide();
-    }, 3000); // Change slide every 3 seconds
+    const interval = setInterval(goToNextSlide, 3000); // Change slide every 3 seconds
 
     return () => clearInterval(interval); // Cleanup interval on component unmount
-  }, [currentSlide]); // Re-run effect when currentSlide changes
+  }, [goToNextSlide]); // Include goToNextSlide in dependencies
 
   return (
     <div className="carousel">

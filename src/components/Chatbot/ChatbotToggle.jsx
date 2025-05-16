@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import './ChatbotToggle.css';
 
 // Import Timburr image
@@ -20,6 +20,11 @@ const ChatbotToggle = ({ isOpen, toggleChat }) => {
       )}
     </button>
   );
+};
+
+ChatbotToggle.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  toggleChat: PropTypes.func.isRequired
 };
 
 export default ChatbotToggle; 

@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import './Timbur.css';
 import { processMessage } from '../../services/chatbotService';
 import ChatHistory from '../ChatHistory';
@@ -12,7 +13,6 @@ const Timbur = ({ onClose }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const messagesEndRef = useRef(null);
-  const user = JSON.parse(localStorage.getItem('user'));
 
   // Load chat history on component mount
   useEffect(() => {
@@ -93,6 +93,10 @@ const Timbur = ({ onClose }) => {
     });
   };
 
+  const toggleHistory = () => {
+    setShowHistory(!showHistory);
+  };
+
   const clearHistory = () => {
     const welcomeMessage = {
       type: 'bot',
@@ -101,10 +105,7 @@ const Timbur = ({ onClose }) => {
     };
     setMessages([welcomeMessage]);
     localStorage.setItem('chatHistory', JSON.stringify([welcomeMessage]));
-  };
-
-  const toggleHistory = () => {
-    setShowHistory(!showHistory);
+    setShowHistory(false);
   };
 
   return (
@@ -127,6 +128,16 @@ const Timbur = ({ onClose }) => {
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </button>
+          <button 
+            className="clear-history-button"
+            onClick={clearHistory}
+            aria-label="Clear history"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M19 6h-4V5a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v1H5" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M7 6v14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V6" strokeWidth="2" strokeLinecap="round"/>
             </svg>
           </button>
           <button 
@@ -203,6 +214,10 @@ const Timbur = ({ onClose }) => {
       </form>
     </div>
   );
+};
+
+Timbur.propTypes = {
+  onClose: PropTypes.func.isRequired
 };
 
 export default Timbur; 

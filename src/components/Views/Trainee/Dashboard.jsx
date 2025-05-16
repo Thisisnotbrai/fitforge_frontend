@@ -1,7 +1,6 @@
 // components/Views/Trainee/Dashboard.jsx
 import { useState, useEffect, useCallback } from "react";
 import "./Dashboard.css";
-import Modal from "../../../components/Modal";
 // When packages are installed, uncomment these imports:
 // import { Calendar, momentLocalizer } from 'react-big-calendar';
 // import moment from 'moment';
@@ -12,11 +11,10 @@ function Dashboard() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [events, setEvents] = useState([]);
   const [showCalendarModal, setShowCalendarModal] = useState(false);
-  const [showAllEventsModal, setShowAllEventsModal] = useState(false);
+  const [, setShowAllEventsModal] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showEventModal, setShowEventModal] = useState(false);
-  const [selectedEvents, setSelectedEvents] = useState(new Set());
   const [currentEvent, setCurrentEvent] = useState({
     id: null,
     title: "",
@@ -499,35 +497,19 @@ function Dashboard() {
   };
   
   // Handle multiple event selection
-  const handleEventSelection = (event, eventId) => {
-    event.stopPropagation(); // Prevent opening edit modal
-    setSelectedEvents(prev => {
-      const newSelection = new Set(prev);
-      if (newSelection.has(eventId)) {
-        newSelection.delete(eventId);
-      } else {
-        newSelection.add(eventId);
-      }
-      return newSelection;
-    });
-  };
+  // const handleEventSelection = (event, eventId) => {
+  //   event.stopPropagation(); // Prevent opening edit modal
+  //   setSelectedEvents(prev => {
+  //     const newSelection = new Set(prev);
+  //     if (newSelection.has(eventId)) {
+  //       newSelection.delete(eventId);
+  //     } else {
+  //       newSelection.add(eventId);
+  //     }
+  //     return newSelection;
+  //   });
+  // };
 
-  // Delete multiple events
-  const handleDeleteMultipleEvents = () => {
-    if (selectedEvents.size === 0) return;
-
-    const confirmDelete = window.confirm(
-      `Are you sure you want to delete ${selectedEvents.size} event${selectedEvents.size > 1 ? 's' : ''}?`
-    );
-
-    if (confirmDelete) {
-      setEvents(prevEvents => 
-        prevEvents.filter(event => !selectedEvents.has(event.id))
-      );
-      setSelectedEvents(new Set());
-    }
-  };
-  
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
@@ -737,7 +719,7 @@ function Dashboard() {
           </div>
         </div>
       )}
-      </div>
+    </div>
   );
 }
 

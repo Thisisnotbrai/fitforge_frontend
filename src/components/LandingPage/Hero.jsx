@@ -1,4 +1,3 @@
-import React from "react";
 import { ShieldCheck, Zap, Repeat } from "lucide-react"; // Import Lucide icons
 import "./Hero.css";
 
@@ -29,7 +28,7 @@ const Hero = () => {
           <Zap size={32} className="feature-icon1" />
           <h3 className="feature-title1">Seamless Integration</h3>
           <p className="feature-description1">
-            Whether you're at home, at the gym, or traveling, your fitness data is available across multiple devices. Stay on top of your goals with cross-platform accessibility.
+            Whether youre at home, at the gym, or traveling, your fitness data is available across multiple devices. Stay on top of your goals with cross-platform accessibility.
           </p>
         </div>
 

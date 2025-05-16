@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import "./Hire.css";
 import BookingModal from "./BookingModal";
 import axios from "axios";
@@ -17,7 +17,7 @@ const Hire = () => {
   const [hasActivePartnership, setHasActivePartnership] = useState(false);
   const [activePartnershipTrainer, setActivePartnershipTrainer] =
     useState(null);
-
+    const apiUrl = useMemo(() => import.meta.env.VITE_API_URL, []);
   useEffect(() => {
     // Fetch current user from localStorage instead of an API call
     const fetchCurrentUser = () => {
@@ -50,7 +50,7 @@ const Hire = () => {
     const checkActivePartnerships = async (traineeId) => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/partnership/trainee/${traineeId}`
+          `${apiUrl}/partnership/trainee/${traineeId}`
         );
 
         console.log("Partnerships response:", response.data);
@@ -85,7 +85,7 @@ const Hire = () => {
         console.log("Fetching trainers from API");
         // Updated to match backend API endpoint if needed
         const response = await axios.get(
-          `http://localhost:3000/trainerinfo/trainers`
+          `${apiUrl}/trainerinfo/trainers`
         );
 
         console.log("API Response:", response.data); // For debugging
@@ -147,7 +147,7 @@ const Hire = () => {
 
     fetchCurrentUser();
     fetchTrainers();
-  }, []);
+  }, [apiUrl]);
 
   // Extract unique categories from trainers
   const extractCategories = () => {

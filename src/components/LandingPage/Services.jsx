@@ -1,4 +1,3 @@
-import React from "react";
 import { Globe, Key, Moon, PenSquare, Lock, Tag, ThumbsUp, Bell } from "lucide-react";
 import "./Services.css";
 

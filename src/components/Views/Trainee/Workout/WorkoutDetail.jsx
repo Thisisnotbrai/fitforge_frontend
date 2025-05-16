@@ -86,7 +86,7 @@ const WorkoutDetail = () => {
           try {
             // First try to get it as a trainee workout
             const traineeWorkoutResponse = await axios.get(
-              `http://localhost:3000/trainee/workouts/${id}`,
+              `${apiUrl}/trainee/workouts/${id}`,
               {
                 headers: {
                   'Authorization': `Bearer ${token}`
@@ -108,7 +108,7 @@ const WorkoutDetail = () => {
         // If not found as trainee workout, try regular workout
         if (!workoutData) {
           const regularResponse = await axios.get(
-            `http://localhost:3000/workouts/workouts/${id}`
+            `${apiUrl}/workouts/workouts/${id}`
           );
           
           workoutData = regularResponse.data;
@@ -181,7 +181,7 @@ const WorkoutDetail = () => {
       console.log("Sending exercise data:", exerciseToAdd);
 
       const response = await axios.post(
-        `http://localhost:3000/exercises/create`,
+        `${apiUrl}/exercises/create`,
         exerciseToAdd,
         {
           headers: {
@@ -230,7 +230,7 @@ const WorkoutDetail = () => {
       if (!confirmed) return;
 
       const response = await axios.delete(
-        `http://localhost:3000/exercises/${exerciseId}`,
+        `${apiUrl}/exercises/${exerciseId}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -266,7 +266,7 @@ const WorkoutDetail = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:3000/exercises/${editingExerciseId}`,
+        `${apiUrl}/exercises/${editingExerciseId}`,
         newExercise,
         {
           headers: {

@@ -139,9 +139,7 @@ const BookingStatusUpdater = ({ booking, onStatusChange }) => {
   };
 
   // Format date for display
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleString();
-  };
+ 
 
   return (
     <div className="booking-status-updater">

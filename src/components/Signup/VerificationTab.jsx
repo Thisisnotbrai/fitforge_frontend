@@ -45,10 +45,10 @@ const VerificationTab = () => {
         if (storedUser) {
           // User is coming from registration, we need to check if they're verified
           const userData = JSON.parse(storedUser);
-          
+          const apiUrl = import.meta.env.VITE_API_URL;
           try {
             // Try to login which will tell us if verified
-            const loginResponse = await axios.post("http://localhost:3000/users/login", {
+            const loginResponse = await axios.post(`${apiUrl}/users/login`, {
               user_email: userData.email,
               user_password: userData.password
             });
@@ -160,10 +160,10 @@ const VerificationTab = () => {
       setIsVerifying(false);
       return;
     }
-
+    const apiUrl = import.meta.env.VITE_API_URL;
     try {
       // Call the backend verification API
-      const response = await axios.post("http://localhost:3000/users/verify", {
+      const response = await axios.post(`${apiUrl}/users/verify`, {
         email: email,
         verification_code: verificationCode.join("")
       });
@@ -182,7 +182,7 @@ const VerificationTab = () => {
           
           try {
             // Attempt to log in the user
-            const loginResponse = await axios.post("http://localhost:3000/users/login", {
+            const loginResponse = await axios.post(`${apiUrl}/users/login`, {
               user_email: userData.email,
               user_password: userData.password
             });
@@ -243,7 +243,7 @@ const VerificationTab = () => {
       alert(`A new verification code would be sent to ${email}`);
       
       // In a real implementation, you would have code like:
-      // await axios.post("http://localhost:3000/users/resend-verification", { email });
+      // await axios.post("${apiUrl}/users/resend-verification", { email });
     } catch (err) {
       console.error("Failed to resend code:", err);
       setError("Failed to resend verification code. Please try again.");

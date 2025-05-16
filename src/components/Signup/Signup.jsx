@@ -43,9 +43,9 @@ const Signup = () => {
 
     setLoading(true);
     setApiError("");
-
+    const apiUrl = import.meta.env.VITE_API_URL;
     try {
-      const result = await axios.post("http://localhost:3000/users/register", {
+      const result = await axios.post(`${apiUrl}/users/register`, {
         user_name,
         user_email,
         user_password,

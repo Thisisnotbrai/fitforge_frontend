@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "./PartnershipDisplay.css"; // You'll need to create this CSS file
 import axios from "axios";

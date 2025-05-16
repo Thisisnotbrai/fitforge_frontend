@@ -29,7 +29,7 @@ const WorkoutList = () => {
     const fetchWorkouts = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/workouts/workouts"
+          "${apiUrl}/workouts/workouts"
         );
         setWorkouts(response.data);
 
@@ -43,7 +43,7 @@ const WorkoutList = () => {
           if (user.role === "trainer" || user.user_role === "trainer") {
             const token = localStorage.getItem("token");
             const traineeResponse = await axios.get(
-              `http://localhost:3000/partnership/trainer/${user.id}`,
+              `${apiUrl}/partnership/trainer/${user.id}`,
               {
                 headers: { Authorization: `Bearer ${token}` },
               }
@@ -86,7 +86,7 @@ const WorkoutList = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        "http://localhost:3000/trainee/create-workout-for-trainee",
+        "${apiUrl}/trainee/create-workout-for-trainee",
         {
           trainee_id: selectedTrainee.id,
           ...newWorkout,

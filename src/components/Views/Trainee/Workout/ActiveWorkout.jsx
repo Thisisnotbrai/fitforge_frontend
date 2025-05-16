@@ -40,7 +40,7 @@ const ActiveWorkout = () => {
         if (token) {
           try {
             const traineeResponse = await axios.get(
-              `http://localhost:3000/trainee/workouts/${id}`,
+              `${apiUrl}/trainee/workouts/${id}`,
               {
                 headers: {
                   'Authorization': `Bearer ${token}`
@@ -63,7 +63,7 @@ const ActiveWorkout = () => {
         if (!workoutData) {
           try {
             const regularResponse = await axios.get(
-              `http://localhost:3000/workouts/workouts/${id}`
+              `${apiUrl}/workouts/workouts/${id}`
             );
             
             if (regularResponse.data) {
@@ -160,8 +160,8 @@ const ActiveWorkout = () => {
         if (token) {
           // Different endpoints for user workouts vs. featured workouts
           const endpoint = isUserWorkout
-            ? "http://localhost:3000/trainee/workout-history"
-            : "http://localhost:3000/workouts/workout-history";
+            ? "${apiUrl}/trainee/workout-history"
+            : "${apiUrl}/workouts/workout-history";
           
           axios.post(endpoint, {
             workoutId: workout.id,

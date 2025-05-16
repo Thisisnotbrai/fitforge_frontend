@@ -1,18 +1,358 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
   faPlus, 
   faMinus, 
   faUtensils, 
   faTint, 
-  faAppleAlt, 
   faChartPie, 
   faBullseye,
-  faSearch,
   faTimes,
   faLeaf
 } from "@fortawesome/free-solid-svg-icons";
 import "./Nutrition.css";
+
+// Sample recipes database moved outside component
+const recipes = [
+  {
+    id: 1,
+    name: "Greek Yogurt Parfait",
+    ingredients: ["greek yogurt", "honey", "berries", "granola"],
+    instructions: "Layer yogurt, berries, and granola in a glass. Drizzle with honey.",
+    prepTime: "5 minutes",
+    calories: 320,
+    protein: 18,
+    carbs: 45,
+    fat: 8,
+    image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["breakfast", "high-protein", "quick"]
+  },
+  {
+    id: 2,
+    name: "Avocado Toast with Egg",
+    ingredients: ["bread", "avocado", "eggs", "salt", "pepper", "red pepper flakes"],
+    instructions: "Toast bread, mash avocado on top, add fried or poached egg, season with salt, pepper and red pepper flakes.",
+    prepTime: "10 minutes",
+    calories: 380,
+    protein: 15,
+    carbs: 30,
+    fat: 22,
+    image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["breakfast", "high-fat", "vegetarian"]
+  },
+  {
+    id: 3,
+    name: "Chicken and Vegetable Stir-Fry",
+    ingredients: ["chicken breast", "broccoli", "carrots", "bell peppers", "garlic", "soy sauce", "olive oil"],
+    instructions: "Stir-fry chicken pieces until cooked, add vegetables and garlic, season with soy sauce.",
+    prepTime: "20 minutes",
+    calories: 420,
+    protein: 35,
+    carbs: 25,
+    fat: 15,
+    image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["dinner", "high-protein", "meal-prep"]
+  },
+  {
+    id: 4,
+    name: "Mediterranean Quinoa Salad",
+    ingredients: ["quinoa", "cucumber", "tomatoes", "red onion", "feta cheese", "olives", "olive oil", "lemon juice"],
+    instructions: "Mix cooked quinoa with chopped vegetables, feta, and olives. Dress with olive oil and lemon juice.",
+    prepTime: "15 minutes",
+    calories: 340,
+    protein: 12,
+    carbs: 42,
+    fat: 14,
+    image: "https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["lunch", "vegetarian", "meal-prep"]
+  },
+  {
+    id: 5,
+    name: "Baked Salmon with Asparagus",
+    ingredients: ["salmon", "asparagus", "lemon", "garlic", "olive oil", "salt", "pepper", "dill"],
+    instructions: "Season salmon fillet, place on baking sheet with asparagus, bake until salmon is flaky.",
+    prepTime: "25 minutes",
+    calories: 380,
+    protein: 32,
+    carbs: 10,
+    fat: 24,
+    image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["dinner", "high-protein", "low-carb"]
+  },
+  {
+    id: 6,
+    name: "Oatmeal with Fruits and Nuts",
+    ingredients: ["oats", "milk", "banana", "berries", "nuts", "honey", "cinnamon"],
+    instructions: "Cook oats with milk, top with sliced banana, berries, nuts, honey, and a sprinkle of cinnamon.",
+    prepTime: "10 minutes",
+    calories: 380,
+    protein: 12,
+    carbs: 60,
+    fat: 10,
+    image: "https://images.unsplash.com/photo-1517673132405-a56a62b18caf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["breakfast", "vegetarian", "high-fiber"]
+  },
+  {
+    id: 7,
+    name: "Turkey and Hummus Wrap",
+    ingredients: ["tortilla", "turkey", "hummus", "spinach", "tomatoes", "cucumber"],
+    instructions: "Spread hummus on tortilla, layer with turkey slices and vegetables, roll up tightly.",
+    prepTime: "5 minutes",
+    calories: 320,
+    protein: 22,
+    carbs: 35,
+    fat: 12,
+    image: "https://images.unsplash.com/photo-1509722747041-616f39b57569?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["lunch", "high-protein", "quick"]
+  },
+  {
+    id: 8,
+    name: "Lentil Soup",
+    ingredients: ["lentils", "carrots", "celery", "onion", "garlic", "tomatoes", "vegetable broth", "cumin"],
+    instructions: "Sauté vegetables, add lentils, broth, and spices, simmer until lentils are tender.",
+    prepTime: "35 minutes",
+    calories: 280,
+    protein: 18,
+    carbs: 40,
+    fat: 4,
+    image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["dinner", "vegetarian", "high-fiber"]
+  },
+  {
+    id: 9,
+    name: "Sweet Potato and Black Bean Bowl",
+    ingredients: ["sweet potatoes", "black beans", "rice", "avocado", "lime", "cilantro", "cumin", "paprika"],
+    instructions: "Roast diced sweet potatoes with spices, serve over rice with black beans, top with avocado and cilantro.",
+    prepTime: "30 minutes",
+    calories: 420,
+    protein: 15,
+    carbs: 70,
+    fat: 10,
+    image: "https://images.unsplash.com/photo-1543339500-40b3d910e1b8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["dinner", "vegetarian", "high-fiber"]
+  },
+  {
+    id: 10,
+    name: "Berry Protein Smoothie",
+    ingredients: ["protein powder", "berries", "banana", "spinach", "milk", "ice"],
+    instructions: "Blend all ingredients until smooth, adding more liquid if needed.",
+    prepTime: "5 minutes",
+    calories: 280,
+    protein: 25,
+    carbs: 35,
+    fat: 5,
+    image: "https://images.unsplash.com/photo-1553530666-ba11a90a0eda?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["breakfast", "high-protein", "quick"]
+  },
+  {
+    id: 11,
+    name: "Chicken Adobo",
+    ingredients: ["chicken thighs", "soy sauce", "vinegar", "garlic", "black peppercorns", "bay leaves", "cooking oil", "rice"],
+    instructions: "Marinate chicken in soy sauce, vinegar, garlic, peppercorns, and bay leaves. Heat oil in a pan, brown chicken, then add marinade. Simmer until chicken is tender and sauce is reduced.",
+    prepTime: "45 minutes",
+    calories: 450,
+    protein: 35,
+    carbs: 30,
+    fat: 25,
+    image: "/src/assets/chicken-adobo.jpg",
+    tags: ["filipino", "dinner", "high-protein"]
+  },
+  {
+    id: 12,
+    name: "Sinigang na Baboy",
+    ingredients: ["pork belly", "tamarind", "tomatoes", "onion", "eggplant", "string beans", "spinach", "fish sauce", "rice"],
+    instructions: "Boil pork until tender. Add tamarind, tomatoes, and onions. Simmer, then add vegetables. Season with fish sauce. Serve hot with rice.",
+    prepTime: "60 minutes",
+    calories: 420,
+    protein: 28,
+    carbs: 35,
+    fat: 22,
+    image: "/src/assets/sinigang.jpg",
+    tags: ["filipino", "soup", "dinner"]
+  },
+  {
+    id: 13,
+    name: "Pancit Bihon",
+    ingredients: ["rice noodles", "chicken breast", "carrots", "cabbage", "green beans", "garlic", "onion", "soy sauce", "fish sauce"],
+    instructions: "Soak noodles. Stir-fry chicken with garlic and onions. Add vegetables and cook until tender. Add noodles and season with soy sauce and fish sauce.",
+    prepTime: "30 minutes",
+    calories: 380,
+    protein: 25,
+    carbs: 50,
+    fat: 10,
+    image: "/src/assets/pancit-bihon.jpg",
+    tags: ["filipino", "noodles", "lunch"]
+  },
+  {
+    id: 14,
+    name: "Kare-Kare",
+    ingredients: ["oxtail", "peanut butter", "eggplant", "string beans", "banana blossom", "ground rice", "garlic", "onion", "shrimp paste"],
+    instructions: "Cook oxtail until tender. Make sauce with peanut butter and ground rice. Add vegetables and simmer until cooked. Serve with shrimp paste.",
+    prepTime: "120 minutes",
+    calories: 520,
+    protein: 32,
+    carbs: 25,
+    fat: 35,
+    image: "/src/assets/kare-kare.jpg",
+    tags: ["filipino", "dinner", "special"]
+  },
+  {
+    id: 15,
+    name: "Ginisang Munggo",
+    ingredients: ["mung beans", "spinach", "garlic", "onion", "pork bits", "fish sauce", "black pepper"],
+    instructions: "Cook mung beans until soft. Sauté garlic, onion, and pork bits. Add cooked mung beans and spinach. Season with fish sauce and pepper.",
+    prepTime: "40 minutes",
+    calories: 280,
+    protein: 18,
+    carbs: 35,
+    fat: 8,
+    image: "/src/assets/ginisang-munggo.jpg",
+    tags: ["filipino", "healthy", "lunch"]
+  },
+  {
+    id: 16,
+    name: "Beef Caldereta",
+    ingredients: ["beef chunks", "potatoes", "carrots", "bell peppers", "liver spread", "tomato sauce", "cheese", "green peas", "bay leaves"],
+    instructions: "Simmer beef until tender. Sauté vegetables, add beef, liver spread, and tomato sauce. Add cheese and simmer until sauce thickens.",
+    prepTime: "90 minutes",
+    calories: 480,
+    protein: 35,
+    carbs: 30,
+    fat: 28,
+    image: "/src/assets/caldereta.jpg",
+    tags: ["filipino", "dinner", "special"]
+  },
+  {
+    id: 17,
+    name: "Ginataang Manok",
+    ingredients: ["chicken pieces", "coconut milk", "ginger", "garlic", "onion", "green chili", "fish sauce", "spinach"],
+    instructions: "Sauté garlic, ginger, and onion. Add chicken and cook until browned. Pour coconut milk and simmer. Add spinach and season with fish sauce.",
+    prepTime: "45 minutes",
+    calories: 420,
+    protein: 30,
+    carbs: 15,
+    fat: 28,
+    image: "/src/assets/ginataang-manok.jpg",
+    tags: ["filipino", "coconut", "dinner"]
+  },
+  {
+    id: 18,
+    name: "Pinakbet",
+    ingredients: ["bitter gourd", "eggplant", "okra", "string beans", "squash", "shrimp paste", "pork belly", "garlic", "onion"],
+    instructions: "Sauté garlic, onion, and pork. Add vegetables and shrimp paste. Simmer until vegetables are tender but not overcooked.",
+    prepTime: "35 minutes",
+    calories: 290,
+    protein: 15,
+    carbs: 25,
+    fat: 18,
+    image: "/src/assets/pinakbet.jpg",
+    tags: ["filipino", "vegetables", "healthy"]
+  },
+  {
+    id: 19,
+    name: "Grilled Chicken Quinoa Bowl",
+    ingredients: ["chicken breast", "quinoa", "kale", "sweet potatoes", "avocado", "olive oil", "lemon juice", "garlic"],
+    instructions: "Cook quinoa. Grill seasoned chicken breast. Roast sweet potatoes. Massage kale with olive oil and lemon. Combine all ingredients and top with sliced avocado.",
+    prepTime: "35 minutes",
+    calories: 520,
+    protein: 42,
+    carbs: 45,
+    fat: 22,
+    image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["high-protein", "healthy", "meal-prep"]
+  },
+  {
+    id: 20,
+    name: "Tuna Protein Salad",
+    ingredients: ["tuna steak", "mixed greens", "chickpeas", "hard-boiled eggs", "cherry tomatoes", "red onion", "olive oil", "balsamic vinegar"],
+    instructions: "Sear tuna steak. Mix greens, chickpeas, sliced eggs, tomatoes, and onion. Top with sliced tuna and dress with olive oil and balsamic.",
+    prepTime: "20 minutes",
+    calories: 440,
+    protein: 45,
+    carbs: 25,
+    fat: 18,
+    image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["high-protein", "low-carb", "lunch"]
+  },
+  {
+    id: 21,
+    name: "Tempeh Buddha Bowl",
+    ingredients: ["tempeh", "brown rice", "broccoli", "carrots", "edamame", "tahini", "soy sauce", "ginger", "sesame seeds"],
+    instructions: "Marinate and bake tempeh. Cook brown rice. Steam vegetables. Make tahini sauce. Assemble bowl and top with sesame seeds.",
+    prepTime: "40 minutes",
+    calories: 480,
+    protein: 32,
+    carbs: 55,
+    fat: 20,
+    image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["vegetarian", "high-protein", "meal-prep"]
+  },
+  {
+    id: 22,
+    name: "Greek Yogurt Power Bowl",
+    ingredients: ["greek yogurt", "mixed berries", "chia seeds", "almonds", "protein powder", "honey", "granola", "cinnamon"],
+    instructions: "Mix protein powder with Greek yogurt. Top with berries, nuts, seeds, and a drizzle of honey. Sprinkle with cinnamon.",
+    prepTime: "10 minutes",
+    calories: 380,
+    protein: 35,
+    carbs: 40,
+    fat: 15,
+    image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["breakfast", "high-protein", "quick"]
+  },
+  {
+    id: 23,
+    name: "Salmon and Lentil Bowl",
+    ingredients: ["salmon fillet", "green lentils", "spinach", "roasted peppers", "feta cheese", "lemon", "dill", "olive oil"],
+    instructions: "Cook lentils. Pan-sear salmon. Wilt spinach. Combine ingredients and top with crumbled feta, fresh dill, and lemon.",
+    prepTime: "30 minutes",
+    calories: 520,
+    protein: 48,
+    carbs: 35,
+    fat: 25,
+    image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["high-protein", "omega-3", "dinner"]
+  },
+  {
+    id: 24,
+    name: "Turkey and Sweet Potato Skillet",
+    ingredients: ["ground turkey", "sweet potatoes", "bell peppers", "onion", "garlic", "black beans", "cumin", "chili powder"],
+    instructions: "Brown turkey with spices. Add diced sweet potatoes and vegetables. Cook until tender. Stir in black beans and heat through.",
+    prepTime: "25 minutes",
+    calories: 420,
+    protein: 38,
+    carbs: 45,
+    fat: 12,
+    image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["high-protein", "meal-prep", "healthy"]
+  },
+  {
+    id: 25,
+    name: "Cottage Cheese Protein Plate",
+    ingredients: ["cottage cheese", "hard-boiled eggs", "tuna", "cucumber", "cherry tomatoes", "whole grain crackers", "black pepper"],
+    instructions: "Arrange cottage cheese, eggs, and tuna on a plate. Serve with sliced vegetables and crackers. Season with pepper.",
+    prepTime: "15 minutes",
+    calories: 380,
+    protein: 45,
+    carbs: 20,
+    fat: 16,
+    image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["high-protein", "low-carb", "quick"]
+  },
+  {
+    id: 26,
+    name: "Tofu Stir-Fry with Edamame",
+    ingredients: ["firm tofu", "edamame", "broccoli", "mushrooms", "brown rice", "ginger", "garlic", "soy sauce", "sesame oil"],
+    instructions: "Press and cube tofu. Stir-fry with vegetables and edamame. Season with ginger, garlic, and soy sauce. Serve over brown rice.",
+    prepTime: "30 minutes",
+    calories: 400,
+    protein: 28,
+    carbs: 42,
+    fat: 18,
+    image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["vegetarian", "high-protein", "dinner"]
+  }
+];
 
 const Nutrition = () => {
   // State for meal planning and tracking
@@ -74,438 +414,65 @@ const Nutrition = () => {
   }, []);
   
   // Storage keys
-  const getMealsStorageKey = () => `nutrition_meals_${currentUserEmail || "default"}`;
-  const getWaterStorageKey = () => `nutrition_water_${currentUserEmail || "default"}`;
-  const getGoalsStorageKey = () => `nutrition_goals_${currentUserEmail || "default"}`;
-  const getIngredientsStorageKey = () => `nutrition_ingredients_${currentUserEmail || "default"}`;
+  const getMealsStorageKey = useCallback(() => 
+    `nutrition_meals_${currentUserEmail || "default"}`, [currentUserEmail]
+  );
   
-  // Sample recipes database
-  const recipes = [
-    {
-      id: 1,
-      name: "Greek Yogurt Parfait",
-      ingredients: ["greek yogurt", "honey", "berries", "granola"],
-      instructions: "Layer yogurt, berries, and granola in a glass. Drizzle with honey.",
-      prepTime: "5 minutes",
-      calories: 320,
-      protein: 18,
-      carbs: 45,
-      fat: 8,
-      image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      tags: ["breakfast", "high-protein", "quick"]
-    },
-    {
-      id: 2,
-      name: "Avocado Toast with Egg",
-      ingredients: ["bread", "avocado", "eggs", "salt", "pepper", "red pepper flakes"],
-      instructions: "Toast bread, mash avocado on top, add fried or poached egg, season with salt, pepper and red pepper flakes.",
-      prepTime: "10 minutes",
-      calories: 380,
-      protein: 15,
-      carbs: 30,
-      fat: 22,
-      image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      tags: ["breakfast", "high-fat", "vegetarian"]
-    },
-    {
-      id: 3,
-      name: "Chicken and Vegetable Stir-Fry",
-      ingredients: ["chicken breast", "broccoli", "carrots", "bell peppers", "garlic", "soy sauce", "olive oil"],
-      instructions: "Stir-fry chicken pieces until cooked, add vegetables and garlic, season with soy sauce.",
-      prepTime: "20 minutes",
-      calories: 420,
-      protein: 35,
-      carbs: 25,
-      fat: 15,
-      image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      tags: ["dinner", "high-protein", "meal-prep"]
-    },
-    {
-      id: 4,
-      name: "Mediterranean Quinoa Salad",
-      ingredients: ["quinoa", "cucumber", "tomatoes", "red onion", "feta cheese", "olives", "olive oil", "lemon juice"],
-      instructions: "Mix cooked quinoa with chopped vegetables, feta, and olives. Dress with olive oil and lemon juice.",
-      prepTime: "15 minutes",
-      calories: 340,
-      protein: 12,
-      carbs: 42,
-      fat: 14,
-      image: "https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      tags: ["lunch", "vegetarian", "meal-prep"]
-    },
-    {
-      id: 5,
-      name: "Baked Salmon with Asparagus",
-      ingredients: ["salmon", "asparagus", "lemon", "garlic", "olive oil", "salt", "pepper", "dill"],
-      instructions: "Season salmon fillet, place on baking sheet with asparagus, bake until salmon is flaky.",
-      prepTime: "25 minutes",
-      calories: 380,
-      protein: 32,
-      carbs: 10,
-      fat: 24,
-      image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      tags: ["dinner", "high-protein", "low-carb"]
-    },
-    {
-      id: 6,
-      name: "Oatmeal with Fruits and Nuts",
-      ingredients: ["oats", "milk", "banana", "berries", "nuts", "honey", "cinnamon"],
-      instructions: "Cook oats with milk, top with sliced banana, berries, nuts, honey, and a sprinkle of cinnamon.",
-      prepTime: "10 minutes",
-      calories: 380,
-      protein: 12,
-      carbs: 60,
-      fat: 10,
-      image: "https://images.unsplash.com/photo-1517673132405-a56a62b18caf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      tags: ["breakfast", "vegetarian", "high-fiber"]
-    },
-    {
-      id: 7,
-      name: "Turkey and Hummus Wrap",
-      ingredients: ["tortilla", "turkey", "hummus", "spinach", "tomatoes", "cucumber"],
-      instructions: "Spread hummus on tortilla, layer with turkey slices and vegetables, roll up tightly.",
-      prepTime: "5 minutes",
-      calories: 320,
-      protein: 22,
-      carbs: 35,
-      fat: 12,
-      image: "https://images.unsplash.com/photo-1509722747041-616f39b57569?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      tags: ["lunch", "high-protein", "quick"]
-    },
-    {
-      id: 8,
-      name: "Lentil Soup",
-      ingredients: ["lentils", "carrots", "celery", "onion", "garlic", "tomatoes", "vegetable broth", "cumin"],
-      instructions: "Sauté vegetables, add lentils, broth, and spices, simmer until lentils are tender.",
-      prepTime: "35 minutes",
-      calories: 280,
-      protein: 18,
-      carbs: 40,
-      fat: 4,
-      image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      tags: ["dinner", "vegetarian", "high-fiber"]
-    },
-    {
-      id: 9,
-      name: "Sweet Potato and Black Bean Bowl",
-      ingredients: ["sweet potatoes", "black beans", "rice", "avocado", "lime", "cilantro", "cumin", "paprika"],
-      instructions: "Roast diced sweet potatoes with spices, serve over rice with black beans, top with avocado and cilantro.",
-      prepTime: "30 minutes",
-      calories: 420,
-      protein: 15,
-      carbs: 70,
-      fat: 10,
-      image: "https://images.unsplash.com/photo-1543339500-40b3d910e1b8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      tags: ["dinner", "vegetarian", "high-fiber"]
-    },
-    {
-      id: 10,
-      name: "Berry Protein Smoothie",
-      ingredients: ["protein powder", "berries", "banana", "spinach", "milk", "ice"],
-      instructions: "Blend all ingredients until smooth, adding more liquid if needed.",
-      prepTime: "5 minutes",
-      calories: 280,
-      protein: 25,
-      carbs: 35,
-      fat: 5,
-      image: "https://images.unsplash.com/photo-1553530666-ba11a90a0eda?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      tags: ["breakfast", "high-protein", "quick"]
-    },
-    {
-      id: 11,
-      name: "Chicken Adobo",
-      ingredients: ["chicken thighs", "soy sauce", "vinegar", "garlic", "black peppercorns", "bay leaves", "cooking oil", "rice"],
-      instructions: "Marinate chicken in soy sauce, vinegar, garlic, peppercorns, and bay leaves. Heat oil in a pan, brown chicken, then add marinade. Simmer until chicken is tender and sauce is reduced.",
-      prepTime: "45 minutes",
-      calories: 450,
-      protein: 35,
-      carbs: 30,
-      fat: 25,
-      image: "/src/assets/chicken-adobo.jpg",
-      tags: ["filipino", "dinner", "high-protein"]
-    },
-    {
-      id: 12,
-      name: "Sinigang na Baboy",
-      ingredients: ["pork belly", "tamarind", "tomatoes", "onion", "eggplant", "string beans", "spinach", "fish sauce", "rice"],
-      instructions: "Boil pork until tender. Add tamarind, tomatoes, and onions. Simmer, then add vegetables. Season with fish sauce. Serve hot with rice.",
-      prepTime: "60 minutes",
-      calories: 420,
-      protein: 28,
-      carbs: 35,
-      fat: 22,
-      image: "/src/assets/sinigang.jpg",
-      tags: ["filipino", "soup", "dinner"]
-    },
-    {
-      id: 13,
-      name: "Pancit Bihon",
-      ingredients: ["rice noodles", "chicken breast", "carrots", "cabbage", "green beans", "garlic", "onion", "soy sauce", "fish sauce"],
-      instructions: "Soak noodles. Stir-fry chicken with garlic and onions. Add vegetables and cook until tender. Add noodles and season with soy sauce and fish sauce.",
-      prepTime: "30 minutes",
-      calories: 380,
-      protein: 25,
-      carbs: 50,
-      fat: 10,
-      image: "/src/assets/pancit-bihon.jpg",
-      tags: ["filipino", "noodles", "lunch"]
-    },
-    {
-      id: 14,
-      name: "Kare-Kare",
-      ingredients: ["oxtail", "peanut butter", "eggplant", "string beans", "banana blossom", "ground rice", "garlic", "onion", "shrimp paste"],
-      instructions: "Cook oxtail until tender. Make sauce with peanut butter and ground rice. Add vegetables and simmer until cooked. Serve with shrimp paste.",
-      prepTime: "120 minutes",
-      calories: 520,
-      protein: 32,
-      carbs: 25,
-      fat: 35,
-      image: "/src/assets/kare-kare.jpg",
-      tags: ["filipino", "dinner", "special"]
-    },
-    {
-      id: 15,
-      name: "Ginisang Munggo",
-      ingredients: ["mung beans", "spinach", "garlic", "onion", "pork bits", "fish sauce", "black pepper"],
-      instructions: "Cook mung beans until soft. Sauté garlic, onion, and pork bits. Add cooked mung beans and spinach. Season with fish sauce and pepper.",
-      prepTime: "40 minutes",
-      calories: 280,
-      protein: 18,
-      carbs: 35,
-      fat: 8,
-      image: "/src/assets/ginisang-munggo.jpg",
-      tags: ["filipino", "healthy", "lunch"]
-    },
-    {
-      id: 16,
-      name: "Beef Caldereta",
-      ingredients: ["beef chunks", "potatoes", "carrots", "bell peppers", "liver spread", "tomato sauce", "cheese", "green peas", "bay leaves"],
-      instructions: "Simmer beef until tender. Sauté vegetables, add beef, liver spread, and tomato sauce. Add cheese and simmer until sauce thickens.",
-      prepTime: "90 minutes",
-      calories: 480,
-      protein: 35,
-      carbs: 30,
-      fat: 28,
-      image: "/src/assets/caldereta.jpg",
-      tags: ["filipino", "dinner", "special"]
-    },
-    {
-      id: 17,
-      name: "Ginataang Manok",
-      ingredients: ["chicken pieces", "coconut milk", "ginger", "garlic", "onion", "green chili", "fish sauce", "spinach"],
-      instructions: "Sauté garlic, ginger, and onion. Add chicken and cook until browned. Pour coconut milk and simmer. Add spinach and season with fish sauce.",
-      prepTime: "45 minutes",
-      calories: 420,
-      protein: 30,
-      carbs: 15,
-      fat: 28,
-      image: "/src/assets/ginataang-manok.jpg",
-      tags: ["filipino", "coconut", "dinner"]
-    },
-    {
-      id: 18,
-      name: "Pinakbet",
-      ingredients: ["bitter gourd", "eggplant", "okra", "string beans", "squash", "shrimp paste", "pork belly", "garlic", "onion"],
-      instructions: "Sauté garlic, onion, and pork. Add vegetables and shrimp paste. Simmer until vegetables are tender but not overcooked.",
-      prepTime: "35 minutes",
-      calories: 290,
-      protein: 15,
-      carbs: 25,
-      fat: 18,
-      image: "/src/assets/pinakbet.jpg",
-      tags: ["filipino", "vegetables", "healthy"]
-    },
-    {
-      id: 19,
-      name: "Grilled Chicken Quinoa Bowl",
-      ingredients: ["chicken breast", "quinoa", "kale", "sweet potatoes", "avocado", "olive oil", "lemon juice", "garlic"],
-      instructions: "Cook quinoa. Grill seasoned chicken breast. Roast sweet potatoes. Massage kale with olive oil and lemon. Combine all ingredients and top with sliced avocado.",
-      prepTime: "35 minutes",
-      calories: 520,
-      protein: 42,
-      carbs: 45,
-      fat: 22,
-      image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      tags: ["high-protein", "healthy", "meal-prep"]
-    },
-    {
-      id: 20,
-      name: "Tuna Protein Salad",
-      ingredients: ["tuna steak", "mixed greens", "chickpeas", "hard-boiled eggs", "cherry tomatoes", "red onion", "olive oil", "balsamic vinegar"],
-      instructions: "Sear tuna steak. Mix greens, chickpeas, sliced eggs, tomatoes, and onion. Top with sliced tuna and dress with olive oil and balsamic.",
-      prepTime: "20 minutes",
-      calories: 440,
-      protein: 45,
-      carbs: 25,
-      fat: 18,
-      image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      tags: ["high-protein", "low-carb", "lunch"]
-    },
-    {
-      id: 21,
-      name: "Tempeh Buddha Bowl",
-      ingredients: ["tempeh", "brown rice", "broccoli", "carrots", "edamame", "tahini", "soy sauce", "ginger", "sesame seeds"],
-      instructions: "Marinate and bake tempeh. Cook brown rice. Steam vegetables. Make tahini sauce. Assemble bowl and top with sesame seeds.",
-      prepTime: "40 minutes",
-      calories: 480,
-      protein: 32,
-      carbs: 55,
-      fat: 20,
-      image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      tags: ["vegetarian", "high-protein", "meal-prep"]
-    },
-    {
-      id: 22,
-      name: "Greek Yogurt Power Bowl",
-      ingredients: ["greek yogurt", "mixed berries", "chia seeds", "almonds", "protein powder", "honey", "granola", "cinnamon"],
-      instructions: "Mix protein powder with Greek yogurt. Top with berries, nuts, seeds, and a drizzle of honey. Sprinkle with cinnamon.",
-      prepTime: "10 minutes",
-      calories: 380,
-      protein: 35,
-      carbs: 40,
-      fat: 15,
-      image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      tags: ["breakfast", "high-protein", "quick"]
-    },
-    {
-      id: 23,
-      name: "Salmon and Lentil Bowl",
-      ingredients: ["salmon fillet", "green lentils", "spinach", "roasted peppers", "feta cheese", "lemon", "dill", "olive oil"],
-      instructions: "Cook lentils. Pan-sear salmon. Wilt spinach. Combine ingredients and top with crumbled feta, fresh dill, and lemon.",
-      prepTime: "30 minutes",
-      calories: 520,
-      protein: 48,
-      carbs: 35,
-      fat: 25,
-      image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      tags: ["high-protein", "omega-3", "dinner"]
-    },
-    {
-      id: 24,
-      name: "Turkey and Sweet Potato Skillet",
-      ingredients: ["ground turkey", "sweet potatoes", "bell peppers", "onion", "garlic", "black beans", "cumin", "chili powder"],
-      instructions: "Brown turkey with spices. Add diced sweet potatoes and vegetables. Cook until tender. Stir in black beans and heat through.",
-      prepTime: "25 minutes",
-      calories: 420,
-      protein: 38,
-      carbs: 45,
-      fat: 12,
-      image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      tags: ["high-protein", "meal-prep", "healthy"]
-    },
-    {
-      id: 25,
-      name: "Cottage Cheese Protein Plate",
-      ingredients: ["cottage cheese", "hard-boiled eggs", "tuna", "cucumber", "cherry tomatoes", "whole grain crackers", "black pepper"],
-      instructions: "Arrange cottage cheese, eggs, and tuna on a plate. Serve with sliced vegetables and crackers. Season with pepper.",
-      prepTime: "15 minutes",
-      calories: 380,
-      protein: 45,
-      carbs: 20,
-      fat: 16,
-      image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      tags: ["high-protein", "low-carb", "quick"]
-    },
-    {
-      id: 26,
-      name: "Tofu Stir-Fry with Edamame",
-      ingredients: ["firm tofu", "edamame", "broccoli", "mushrooms", "brown rice", "ginger", "garlic", "soy sauce", "sesame oil"],
-      instructions: "Press and cube tofu. Stir-fry with vegetables and edamame. Season with ginger, garlic, and soy sauce. Serve over brown rice.",
-      prepTime: "30 minutes",
-      calories: 400,
-      protein: 28,
-      carbs: 42,
-      fat: 18,
-      image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      tags: ["vegetarian", "high-protein", "dinner"]
-    }
-  ];
-
-  // Load data from localStorage
-  useEffect(() => {
-    if (!currentUserEmail) return;
-    
-    // Load meals
-    try {
-      const storedMeals = localStorage.getItem(getMealsStorageKey());
-      if (storedMeals) {
-        setMeals(JSON.parse(storedMeals));
-      }
-    } catch (error) {
-      console.error("Error loading meals:", error);
-    }
-    
-    // Load water intake
-    try {
-      const storedWater = localStorage.getItem(getWaterStorageKey());
-      if (storedWater) {
-        const waterData = JSON.parse(storedWater);
-        // Check if the stored water data is for today
-        const today = new Date().toISOString().split("T")[0];
-        if (waterData.date === today) {
-          setWaterIntake(waterData.intake);
-        } else {
-          // Reset water intake for new day
-          setWaterIntake(0);
-          localStorage.setItem(getWaterStorageKey(), JSON.stringify({ intake: 0, date: today }));
-        }
-      } else {
-        // Initialize water tracking for today
-        const today = new Date().toISOString().split("T")[0];
-        localStorage.setItem(getWaterStorageKey(), JSON.stringify({ intake: 0, date: today }));
-      }
-    } catch (error) {
-      console.error("Error loading water intake:", error);
-    }
-    
-    // Load nutritional goals
-    try {
-      const storedGoals = localStorage.getItem(getGoalsStorageKey());
-      if (storedGoals) {
-        setNutritionalGoals(JSON.parse(storedGoals));
-      }
-    } catch (error) {
-      console.error("Error loading nutritional goals:", error);
-    }
-
-    // Load ingredients
-    try {
-      const storedIngredients = localStorage.getItem(getIngredientsStorageKey());
-      if (storedIngredients) {
-        setIngredients(JSON.parse(storedIngredients));
-      }
-    } catch (error) {
-      console.error("Error loading ingredients:", error);
-    }
-  }, [currentUserEmail]);
+  const getWaterStorageKey = useCallback(() => 
+    `nutrition_water_${currentUserEmail || "default"}`, [currentUserEmail]
+  );
   
-  // Save meals to localStorage whenever they change
+  const getGoalsStorageKey = useCallback(() => 
+    `nutrition_goals_${currentUserEmail || "default"}`, [currentUserEmail]
+  );
+  
+  const getIngredientsStorageKey = useCallback(() => 
+    `nutrition_ingredients_${currentUserEmail || "default"}`, [currentUserEmail]
+  );
+  
+  // Load initial data
   useEffect(() => {
-    if (!currentUserEmail || meals.length === 0) return;
+    const loadInitialData = () => {
+      try {
+        const savedMeals = localStorage.getItem(getMealsStorageKey());
+        if (savedMeals) setMeals(JSON.parse(savedMeals));
+
+        const savedWater = localStorage.getItem(getWaterStorageKey());
+        if (savedWater) setWaterIntake(JSON.parse(savedWater));
+
+        const savedGoals = localStorage.getItem(getGoalsStorageKey());
+        if (savedGoals) setNutritionalGoals(JSON.parse(savedGoals));
+
+        const savedIngredients = localStorage.getItem(getIngredientsStorageKey());
+        if (savedIngredients) setIngredients(JSON.parse(savedIngredients));
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    };
+
+    loadInitialData();
+  }, [getMealsStorageKey, getWaterStorageKey, getGoalsStorageKey, getIngredientsStorageKey]);
+
+  // Save meals when updated
+  useEffect(() => {
     localStorage.setItem(getMealsStorageKey(), JSON.stringify(meals));
-  }, [meals, currentUserEmail]);
-  
-  // Save water intake to localStorage whenever it changes
+  }, [meals, getMealsStorageKey]);
+
+  // Save water intake when updated
   useEffect(() => {
-    if (!currentUserEmail) return;
-    const today = new Date().toISOString().split("T")[0];
-    localStorage.setItem(getWaterStorageKey(), JSON.stringify({ intake: waterIntake, date: today }));
-  }, [waterIntake, currentUserEmail]);
-  
-  // Save nutritional goals to localStorage whenever they change
+    localStorage.setItem(getWaterStorageKey(), JSON.stringify(waterIntake));
+  }, [waterIntake, getWaterStorageKey]);
+
+  // Save goals when updated
   useEffect(() => {
-    if (!currentUserEmail) return;
     localStorage.setItem(getGoalsStorageKey(), JSON.stringify(nutritionalGoals));
-  }, [nutritionalGoals, currentUserEmail]);
+  }, [nutritionalGoals, getGoalsStorageKey]);
 
-  // Save ingredients to localStorage whenever they change
+  // Update recipe matches when ingredients change
   useEffect(() => {
-    if (!currentUserEmail) return;
     localStorage.setItem(getIngredientsStorageKey(), JSON.stringify(ingredients));
-
-    // Find matching recipes whenever ingredients change
     findMatchingRecipes();
-  }, [ingredients, currentUserEmail]);
+  }, [ingredients, getIngredientsStorageKey, findMatchingRecipes]);
 
   // Handle adding new ingredient
   const handleAddIngredient = () => {
@@ -524,45 +491,22 @@ const Nutrition = () => {
     setIngredients(ingredients.filter(ingredient => ingredient !== ingredientToRemove));
   };
 
-  // Find recipes that match the user's ingredients
-  const findMatchingRecipes = () => {
+  // Recipe matching function
+  const findMatchingRecipes = useCallback(() => {
     if (ingredients.length === 0) {
       setMatchedRecipes([]);
       return;
     }
 
-    // Calculate a match score for each recipe
-    const recipesWithScores = recipes.map(recipe => {
-      let matchCount = 0;
-      let matchPercentage = 0;
-      
-      // Count how many ingredients match
-      ingredients.forEach(userIngredient => {
-        if (recipe.ingredients.some(recipeIngredient => 
-          recipeIngredient.toLowerCase().includes(userIngredient.toLowerCase()) ||
-          userIngredient.toLowerCase().includes(recipeIngredient.toLowerCase())
-        )) {
-          matchCount++;
-        }
-      });
-      
-      // Calculate what percentage of the recipe's ingredients the user has
-      matchPercentage = Math.round((matchCount / recipe.ingredients.length) * 100);
-      
-      return {
-        ...recipe,
-        matchCount,
-        matchPercentage
-      };
-    });
-    
-    // Filter recipes that have at least one matching ingredient and sort by match percentage
-    const matches = recipesWithScores
-      .filter(recipe => recipe.matchCount > 0)
-      .sort((a, b) => b.matchPercentage - a.matchPercentage);
-    
+    const matches = recipes.filter(recipe =>
+      ingredients.every(ingredient =>
+        recipe.ingredients.some(recipeIngredient =>
+          recipeIngredient.toLowerCase().includes(ingredient.toLowerCase())
+        )
+      )
+    );
     setMatchedRecipes(matches);
-  };
+  }, [ingredients]);
 
   // Handle recipe selection
   const handleSelectRecipe = (recipe) => {
@@ -1128,7 +1072,7 @@ const Nutrition = () => {
                               }}
                             />
                             <div className="recipe-match-percentage">
-                              <span>{recipe.matchPercentage}%</span> match
+                              <span>{calculatePercentage(recipe.calories, nutritionalGoals.caloriesGoal)}%</span> match
                             </div>
                           </div>
                           <div className="recipe-card-content">
@@ -1184,7 +1128,7 @@ const Nutrition = () => {
               
               <div className="goals-info">
                 <h3>About Nutritional Goals</h3>
-                <p>Setting proper nutritional goals is essential for achieving your fitness objectives. Your goals should align with your specific fitness journey, whether you're looking to lose weight, gain muscle, or maintain overall health.</p>
+                <p>Setting proper nutritional goals is essential for achieving your fitness objectives. Your goals should align with your specific fitness journey, whether you&apos;re looking to lose weight, gain muscle, or maintain overall health.</p>
                 <h4>General Guidelines:</h4>
                 <ul>
                   <li>Protein: 0.8-1.2g per pound of body weight (higher for muscle building)</li>

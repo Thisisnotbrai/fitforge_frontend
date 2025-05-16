@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCamera,
@@ -13,13 +13,12 @@ import {
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import "./UserProfile.css";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const UserProfile = () => {
-  const navigate = useNavigate();
-  // User data states
-  const [profileImage, setProfileImage] = useState(null);
+    // User data states
   const [profileImagePreview, setProfileImagePreview] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editableProfile, setEditableProfile] = useState({});
@@ -43,72 +42,8 @@ const UserProfile = () => {
     "Sunday",
   ];
 
-  // Load user profile data when component mounts
-  useEffect(() => {
-    loadUserProfileData();
-  }, []);
-
-  // Fetch trainer info when userId is available and user is a trainer
-  useEffect(() => {
-    if (userId && isTrainer) {
-      fetchTrainerInfo();
-    }
-  }, [userId, isTrainer]);
-
-  // Function to load user profile data from localStorage
-  const loadUserProfileData = () => {
-    try {
-      // Get current user data from localStorage
-      const userData = JSON.parse(localStorage.getItem("user") || "{}");
-
-      // Ensure we have a user email and ID for identifying this user's profile
-      if (!userData.email || !userData.id) {
-        console.error("No user email or ID found, cannot load profile data");
-        return;
-      }
-
-      setCurrentUserEmail(userData.email);
-      setUserId(userData.id);
-
-      // Check if user is a trainer - fixed to use 'role' instead of 'user_role'
-      // This is the key fix - using the 'role' property from the auth system
-      setIsTrainer(userData.role === "trainer");
-
-      // Get user profile data for non-trainer specific fields
-      const userProfileKey = `userProfile_${userData.email}`;
-      const userProfileData = JSON.parse(
-        localStorage.getItem(userProfileKey) || "{}"
-      );
-
-      console.log(`Loading profile data for user: ${userData.email}`);
-      console.log(
-        `User role: ${userData.role}, isTrainer: ${userData.role === "trainer"}`
-      );
-
-      // Combine data from auth and profile
-      const combinedProfile = {
-        ...userData,
-        ...userProfileData,
-        // Ensure the role is properly set in the combined profile
-        // Add this explicitly to make sure it's available
-        user_role: userData.role,
-      };
-
-      // Load previously saved profile image if it exists
-      if (userProfileData.profileImageData) {
-        setProfileImagePreview(userProfileData.profileImageData);
-      }
-
-      // Set the profile state
-      setProfile(combinedProfile);
-      setEditableProfile(combinedProfile);
-    } catch (error) {
-      console.error("Error loading user profile data:", error);
-    }
-  };
-
-  // Function to fetch trainer info from the backend API
-  const fetchTrainerInfo = async () => {
+  // Fetch trainer info function wrapped in useCallback
+  const fetchTrainerInfo = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -119,7 +54,7 @@ const UserProfile = () => {
       }
 
       const response = await axios.get(
-        `http://localhost:3000/trainerinfo/${userId}`,
+        `${apiUrl}/trainerinfo/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -184,6 +119,70 @@ const UserProfile = () => {
     } finally {
       setLoading(false);
     }
+  }, [userId]);
+
+  // Load user profile data when component mounts
+  useEffect(() => {
+    loadUserProfileData();
+  }, []);
+
+  // Fetch trainer info when userId is available and user is a trainer
+  useEffect(() => {
+    if (userId && isTrainer) {
+      fetchTrainerInfo();
+    }
+  }, [userId, isTrainer, fetchTrainerInfo]);
+
+  // Function to load user profile data from localStorage
+  const loadUserProfileData = () => {
+    try {
+      // Get current user data from localStorage
+      const userData = JSON.parse(localStorage.getItem("user") || "{}");
+
+      // Ensure we have a user email and ID for identifying this user's profile
+      if (!userData.email || !userData.id) {
+        console.error("No user email or ID found, cannot load profile data");
+        return;
+      }
+
+      setCurrentUserEmail(userData.email);
+      setUserId(userData.id);
+
+      // Check if user is a trainer - fixed to use 'role' instead of 'user_role'
+      // This is the key fix - using the 'role' property from the auth system
+      setIsTrainer(userData.role === "trainer");
+
+      // Get user profile data for non-trainer specific fields
+      const userProfileKey = `userProfile_${userData.email}`;
+      const userProfileData = JSON.parse(
+        localStorage.getItem(userProfileKey) || "{}"
+      );
+
+      console.log(`Loading profile data for user: ${userData.email}`);
+      console.log(
+        `User role: ${userData.role}, isTrainer: ${userData.role === "trainer"}`
+      );
+
+      // Combine data from auth and profile
+      const combinedProfile = {
+        ...userData,
+        ...userProfileData,
+        // Ensure the role is properly set in the combined profile
+        // Add this explicitly to make sure it's available
+        user_role: userData.role,
+      };
+
+      // Load previously saved profile image if it exists
+      if (userProfileData.profileImageData) {
+        setProfileImagePreview(userProfileData.profileImageData);
+      }
+
+      // Set the profile state
+      setProfile(combinedProfile);
+      setEditableProfile(combinedProfile);
+    } catch (error) {
+      console.error("Error loading user profile data:", error);
+    }
   };
 
   // Save profile changes to localStorage and/or backend
@@ -237,7 +236,7 @@ const UserProfile = () => {
           if (trainerInfoExists) {
             // Update existing trainer info - using direct URL
             await axios.put(
-              `http://localhost:3000/trainerinfo/${userId}`,
+              `${apiUrl}/trainerinfo/${userId}`,
               trainerData,
               {
                 headers: {
@@ -249,7 +248,7 @@ const UserProfile = () => {
           } else {
             // Create new trainer info - using direct URL
             await axios.post(
-              `http://localhost:3000/trainerinfo/${userId}`,
+              `${apiUrl}/trainerinfo/${userId}`,
               trainerData,
               {
                 headers: {
@@ -278,28 +277,9 @@ const UserProfile = () => {
     }
   };
 
-  // Function to fetch all trainers (not used in this component but added for completeness)
-  const fetchAllTrainers = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(
-        `http://localhost:3000/trainerinfo/trainers`
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching trainers:", error);
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleProfileImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const selectedFile = e.target.files[0];
-      setProfileImage(selectedFile);
-
-      // Create a FileReader to convert the image to data URL for preview and storage
       const reader = new FileReader();
       reader.onload = (event) => {
         const imageDataUrl = event.target.result;
@@ -879,7 +859,7 @@ const UserProfile = () => {
                       <div className="trainer-info-message">
                         <FontAwesomeIcon icon={faInfoCircle} />
                         <p>
-                          Please click "Edit Profile" to add your trainer
+                          Please click &quot;Edit Profile&quot; to add your trainer
                           information.
                         </p>
                       </div>
@@ -985,16 +965,10 @@ const UserProfile = () => {
                                       className="certificate-icon"
                                     />
                                     <div className="certificate-details">
-                                      <h4>
-                                        {cert.name || "Unnamed Certificate"}
-                                      </h4>
+                                      <h4>{cert.name || "Unnamed Certificate"}</h4>
                                       <p>
-                                        {cert.issuer && (
-                                          <span>Issuer: {cert.issuer}</span>
-                                        )}
-                                        {cert.year && (
-                                          <span>Year: {cert.year}</span>
-                                        )}
+                                        {cert.issuer && <span>Issuer: {cert.issuer}</span>}
+                                        {cert.year && <span>Year: {cert.year}</span>}
                                       </p>
                                     </div>
                                   </div>

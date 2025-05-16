@@ -198,7 +198,7 @@ const BookingModal = ({ trainer, traineeId, onClose }) => {
       try {
         // Match the endpoint in app.js and BookingsRoutes.js
         const response = await axios.post(
-          "http://localhost:3000/booking/createbook",
+          "${apiUrl}/booking/createbook",
           bookingData
         );
 

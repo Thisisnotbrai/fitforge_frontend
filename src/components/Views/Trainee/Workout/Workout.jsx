@@ -90,7 +90,7 @@ const Workout = () => {
         if (token) {
           try {
             const traineeWorkoutsResponse = await axios.get(
-              "http://localhost:3000/trainee/my-workouts",
+              "${apiUrl}/trainee/my-workouts",
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -125,7 +125,7 @@ const Workout = () => {
         // Also fetch public trainee workouts
         try {
           const publicWorkoutsResponse = await axios.get(
-            "http://localhost:3000/trainee/public-workouts"
+            "${apiUrl}/trainee/public-workouts"
           );
 
           if (
@@ -227,7 +227,7 @@ const Workout = () => {
       if (isEditing && currentWorkoutId) {
         // Update existing workout
         response = await axios.put(
-          `http://localhost:3000/trainee/workouts/${currentWorkoutId}`,
+          `${apiUrl}/trainee/workouts/${currentWorkoutId}`,
           newWorkout,
           {
             headers: {
@@ -257,7 +257,7 @@ const Workout = () => {
       } else {
         // Create new workout
         response = await axios.post(
-          "http://localhost:3000/trainee/workouts",
+          "${apiUrl}/trainee/workouts",
           newWorkout,
           {
             headers: {
@@ -347,7 +347,7 @@ const Workout = () => {
       }
 
       const response = await axios.delete(
-        `http://localhost:3000/trainee/workouts/${workoutId}`,
+        `${apiUrl}/trainee/workouts/${workoutId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
